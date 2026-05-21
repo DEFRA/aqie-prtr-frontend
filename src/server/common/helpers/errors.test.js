@@ -23,7 +23,7 @@ describe('#errors', () => {
     })
 
     expect(result).toEqual(
-      expect.stringContaining('Page not found | aqie-dc-poc-frontend')
+      expect.stringContaining('Page not found | aqie-prtr-frontend')
     )
     expect(statusCode).toBe(statusCodes.notFound)
   })
