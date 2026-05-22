@@ -17,8 +17,13 @@ export const home = {
           options: {
             validate: {
               params: (params) => {
-                if (params.language && !supportedLanguages.has(params.language)) {
-                  throw new Error('Invalid language. Supported languages are en and cy')
+                if (
+                  params.language &&
+                  !supportedLanguages.has(params.language)
+                ) {
+                  throw new Error(
+                    'Invalid language. Supported languages are en and cy'
+                  )
                 }
                 return params
               }

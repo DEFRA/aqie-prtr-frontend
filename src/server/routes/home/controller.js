@@ -10,7 +10,7 @@ export const homeController = {
       searchByLocation: content.searchByLocation,
       searchByLocationDescription: content.searchByLocationDescription,
       downloadData: content.downloadData,
-      downloadDataDescription: content.downloadDataDescription,
+      downloadDataDescription: content.downloadDataDescription
     })
   }
 }
