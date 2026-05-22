@@ -37,7 +37,7 @@
 {% endblock %}
 
 {% block pageTitle %}
-  {{ pageTitle }} - {{ serviceName }}
+  {{ pageTitle }} | {{ serviceName }}
 {% endblock %}
 
 {% block beforeContent %}
@@ -48,10 +48,7 @@
   {% endif %}
 {% endblock %}
 
-{# Adding addtional spacing to match designs #}
-<div class="govuk-!-padding-bottom-4"></div>
 {% block content %}{% endblock %}
-<div class="govuk-!-padding-bottom-4"></div>
 
 {% block footer %}
   {{ govukFooter({
