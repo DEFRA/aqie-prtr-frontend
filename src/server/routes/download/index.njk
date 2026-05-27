@@ -1,6 +1,5 @@
 {% extends 'layouts/page.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block content %}
   {{ appHeading({
@@ -29,13 +28,10 @@
           {% for item in downloadLinks %}
             <li class="govuk-!-margin-bottom-3">
 
-              {{ govukButton({
+              {{ appButtonSecondary({
                 text: item.text,
                 href: item.href,
-                classes: "govuk-button--secondary " + (item.classes or ""),
-                attributes: {
-                  "aria-label": item.text
-                }
+                icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 20" width="18" height="18" aria-hidden="true"><path d="M1.929 9L7 14.071 12.071 9M7 14.071V1M1 18h12" fill="none" stroke="currentColor" stroke-width="2"></path></svg>'
               }) }}
 
             </li>

@@ -1,0 +1,10 @@
+<a href="{{ params.href }}"
+   class="aq-button-secondary {% if params.icon %}aq-button-secondary--icon{% endif %}"
+   data-testid="aq-button-secondary"
+   {% if params.target %}target="{{ params.target }}"{% endif %}
+   {% if params.rel %}rel="{{ params.rel }}"{% endif %}>
+  {% if params.icon %}
+    {{ params.icon | safe }}
+  {% endif %}
+  <span class="aq-button-secondary__text">{{ params.text }}</span>
+</a>
