@@ -44,7 +44,7 @@ export const config = convict({
   serviceName: {
     doc: 'Applications Service Name',
     format: String,
-    default: 'aqie-dc-poc-frontend'
+    default: 'Pollutant Release and Transfer Register'
   },
   root: {
     doc: 'Project root',

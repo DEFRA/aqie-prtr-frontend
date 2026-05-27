@@ -71,7 +71,7 @@ describe('context and cache', () => {
               href: '/about'
             }
           ],
-          serviceName: 'aqie-dc-poc-frontend',
+          serviceName: 'Pollutant Release and Transfer Register',
           serviceUrl: '/'
         })
       })
@@ -160,7 +160,7 @@ describe('context and cache', () => {
               href: '/about'
             }
           ],
-          serviceName: 'aqie-dc-poc-frontend',
+          serviceName: 'Pollutant Release and Transfer Register',
           serviceUrl: '/'
         })
       })
