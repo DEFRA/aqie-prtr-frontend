@@ -179,7 +179,7 @@ export const config = convict({
     keyPrefix: {
       doc: 'Redis cache key prefix name used to isolate the cached results across multiple clients',
       format: String,
-      default: 'aqie-dc-poc-frontend:',
+      default: 'aqie-prtr-frontend:',
       env: 'REDIS_KEY_PREFIX'
     },
     useSingleInstanceCache: {
