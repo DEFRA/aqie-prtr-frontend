@@ -1,5 +1,5 @@
-import { createServer } from '../../server.js'
-import { statusCodes } from '../../common/constants/status-codes.js'
+import { createServer } from '#src/server/server.js'
+import { statusCodes } from '#src/server/common/constants/status-codes.js'
 
 describe('#homeController', () => {
   let server
@@ -16,10 +16,14 @@ describe('#homeController', () => {
   test('Should provide expected response', async () => {
     const { result, statusCode } = await server.inject({
       method: 'GET',
-      url: '/'
+      url: '/uk-pollutant-release-and-transfer-register/en'
     })
 
-    expect(result).toEqual(expect.stringContaining('Home |'))
+    expect(result).toEqual(
+      expect.stringContaining(
+        'UK Pollutant Release and Transfer Register (PRTR) |'
+      )
+    )
     expect(statusCode).toBe(statusCodes.ok)
   })
 })

@@ -11,10 +11,10 @@ vi.mock('node:fs', async () => {
     readFileSync: () => mockReadFileSync()
   }
 })
-vi.mock('../../../server/common/helpers/logging/logger.js', () => ({
+vi.mock('#src/server/common/helpers/logging/logger.js', () => ({
   createLogger: () => ({ error: (...args) => mockLoggerError(...args) })
 }))
-vi.mock(import('#/config/config.js'), async (importOriginal) => {
+vi.mock(import('#src/config/config.js'), async (importOriginal) => {
   const originalModule = await importOriginal()
   return {
     config: {
@@ -71,7 +71,7 @@ describe('context and cache', () => {
               href: '/about'
             }
           ],
-          serviceName: 'Pollutant Release and Transfer Register',
+          serviceName: 'aqie-prtr-frontend',
           serviceUrl: '/'
         })
       })
@@ -160,7 +160,7 @@ describe('context and cache', () => {
               href: '/about'
             }
           ],
-          serviceName: 'Pollutant Release and Transfer Register',
+          serviceName: 'aqie-prtr-frontend',
           serviceUrl: '/'
         })
       })
