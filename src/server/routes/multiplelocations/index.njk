@@ -1,19 +1,31 @@
 {% extends 'layouts/page.njk' %}
+
 {% block content %}
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">{{ heading }} for "{{ searchLocation }}"</h1>
-    <p class="govuk-body">{{ helpText }}</p>
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+
+    <h1 class="govuk-heading-l govuk-!-margin-top-6">
+      {{ title }} '{{ searchLocation }}'
+    </h1>
+
+    <p class="govuk-body">{{ introText }}</p>
+
     <ul class="govuk-list">
       {% for r in results %}
         <li>
           <a class="govuk-link"
              href="/facilities?lng={{ r.lng }}&lat={{ r.lat }}&name={{ r.name | urlencode }}">
-            {{ r.name }}{% if r.districtBorough %}, {{ r.districtBorough }}{% endif %}
+            <span class="govuk-!-font-weight-bold">{{ r.name }}</span>{% if r.districtBorough %}, {{ r.districtBorough }}{% elif r.countyUnitary %}, {{ r.countyUnitary }}{% endif %}
           </a>
         </li>
       {% endfor %}
     </ul>
+
+    <p class="govuk-body">
+      {{ alternativeText }}
+      <a class="govuk-link" href="/search-location/searchagain">{{ searchAgainLink }}</a>
+    </p>
+
   </div>
 </div>
 {% endblock %}

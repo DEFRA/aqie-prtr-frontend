@@ -26,13 +26,11 @@ function setErrorRedirect(request, h, message) {
 
 function renderMultiple(h, langContent, query, matches, radiusMiles) {
   return h.view('multiplelocations/index', {
-    pageTitle: langContent.pageTitle,
-    heading: langContent.heading,
-    helpText: langContent.helpText.replace('{radius}', radiusMiles),
+    ...langContent,
     searchLocation: query,
     radiusMiles,
     results: matches,
-    displayBacklink: true,
+    displayBackLink: true,
     hrefq: TRY_AGAIN_PATH
   })
 }

@@ -6,12 +6,12 @@ export const content = {
       'If you searched for a place in England, Scotland or Wales, you should:',
     suggestions: [
       'check the spelling',
-      'enter a broader location',
+      'enter a wider location',
       'enter a correct postcode'
     ],
     niNote:
       'If you searched for a place in Northern Ireland, check that you have entered the correct postcode.',
-    tryAgainLink: 'Go back to search a location'
+    tryAgainLink: 'Search again'
   },
   cy: {
     pageTitle: 'No locations found --CY',
@@ -20,11 +20,11 @@ export const content = {
       'If you searched for a place in England, Scotland or Wales, you should: --CY',
     suggestions: [
       'check the spelling --CY',
-      'enter a broader location --CY',
+      'enter a wider location --CY',
       'enter a correct postcode --CY'
     ],
     niNote:
       'If you searched for a place in Northern Ireland, check that you have entered the correct postcode. --CY',
-    tryAgainLink: 'Go back to search a location --CY'
+    tryAgainLink: 'Search again --CY'
   }
 }

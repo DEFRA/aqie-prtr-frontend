@@ -23,7 +23,7 @@ function handleNoLocationFoundGet(request, h) {
     ...langContent,
     lang,
     searchLocation: searchValue,
-    displayBacklink: true,
+    displayBackLink: true,
     hrefq: TRY_AGAIN_PATH
   })
 }

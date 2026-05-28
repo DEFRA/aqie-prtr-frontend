@@ -1,8 +1,11 @@
 export const content = {
   en: {
-    pageTitle: 'Choose a location',
+    pageTitle: 'Multiple locations',
+    title: 'Locations matching',
+    introText: 'More than one match was found for your location. Choose the correct location from the following options:',
     heading: 'We found multiple locations',
-    helpText: 'Choose one to see facilities within {radius} miles.',
+    alternativeText: 'Alternatively,',
+    searchAgainLink: 'try searching again',
     noFacility: {
       pageTitle: 'No facilities found',
       headingTemplate:
@@ -16,9 +19,12 @@ export const content = {
     }
   },
   cy: {
-    pageTitle: 'Choose a location --CY',
+    pageTitle: 'Multiple locations --CY',
+    title: 'Locations matching --CY',
+    introText: 'More than one match was found for your location. Choose the correct location from the following options: --CY',
     heading: 'We found multiple locations --CY',
-    helpText: 'Choose one to see facilities within {radius} miles. --CY',
+    alternativeText: 'Alternatively, --CY',
+    searchAgainLink: 'try searching again --CY',
     noFacility: {
       pageTitle: 'No facilities found --CY',
       headingTemplate:

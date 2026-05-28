@@ -27,7 +27,7 @@ function handleSearchLocationGet(request, h) {
 
   return h.view('search-location/index', {
     ...content[lang],
-    displayBacklink: true,
+    displayBackLink: true,
     fullSearchQuery: request.yar.get('fullSearchQuery'),
     errors,
     errorMessage
