@@ -1,5 +1,6 @@
 import { createLogger } from '#src/server/common/helpers/logging/logger.js'
 import { content } from './content.js'
+import { resolveLang } from '#src/server/common/helpers/resolve-language.js'
 
 const logger = createLogger()
 
@@ -18,13 +19,14 @@ function handleSearchLocationGet(request, h) {
     logger.info('[search-location.GET] session cleared via searchagain')
   }
 
+  const lang = resolveLang(request)
   const errors = request.yar.get('errors') || ''
   const errorMessage = request.yar.get('errorMessage') || ''
   request.yar.clear('errors')
   request.yar.clear('errorMessage')
 
   return h.view('search-location/index', {
-    ...content,
+    ...content[lang],
     displayBacklink: true,
     fullSearchQuery: request.yar.get('fullSearchQuery'),
     errors,

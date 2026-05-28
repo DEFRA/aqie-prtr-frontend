@@ -1,0 +1,27 @@
+{% extends 'layouts/page.njk' %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">
+      {{ titlePrefix }} '{{ searchLocation }}'
+    </h1>
+
+    <p class="govuk-body">{{ suggestionsIntro }}</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      {% for suggestion in suggestions %}
+        <li>{{ suggestion }}</li>
+      {% endfor %}
+    </ul>
+
+    <p class="govuk-body">{{ niNote }}</p>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="/search-location">{{ tryAgainLink }}</a>
+    </p>
+
+  </div>
+</div>
+{% endblock %}

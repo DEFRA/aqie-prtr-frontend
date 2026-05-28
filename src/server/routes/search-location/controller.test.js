@@ -7,9 +7,14 @@ function buildResponseToolkit() {
   return h
 }
 
-function buildRequest({ pathname = '/search-location', yarStore = {} } = {}) {
+function buildRequest({
+  pathname = '/search-location',
+  yarStore = {},
+  query = {}
+} = {}) {
   return {
     url: { pathname },
+    query,
     yar: {
       get: (key) => yarStore[key],
       set: (key, value) => {
