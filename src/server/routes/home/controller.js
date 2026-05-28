@@ -1,12 +1,16 @@
-/**
- * A GDS styled example home page controller.
- * Provided as an example, remove or modify as required.
- */
+import { homeContent } from './content.js'
+
 export const homeController = {
-  handler(_request, h) {
+  handler(request, h) {
+    const { language = 'en' } = request.params // optional language parameter
+    const content = homeContent[language]
+
     return h.view('home/index', {
-      pageTitle: 'Home',
-      heading: 'Home'
+      pageTitle: content.pageTitle,
+      searchByLocation: content.searchByLocation,
+      searchByLocationDescription: content.searchByLocationDescription,
+      downloadData: content.downloadData,
+      downloadDataDescription: content.downloadDataDescription
     })
   }
 }

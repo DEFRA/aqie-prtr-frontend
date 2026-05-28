@@ -1,8 +1,8 @@
 import { vi } from 'vitest'
 
 import { catchAll } from './errors.js'
-import { createServer } from '../../server.js'
-import { statusCodes } from '../constants/status-codes.js'
+import { createServer } from '#src/server/server.js'
+import { statusCodes } from '#src/server/common/constants/status-codes.js'
 
 describe('#errors', () => {
   let server
@@ -23,7 +23,7 @@ describe('#errors', () => {
     })
 
     expect(result).toEqual(
-      expect.stringContaining('Page not found | aqie-dc-poc-frontend')
+      expect.stringContaining('Page not found | aqie-prtr-frontend')
     )
     expect(statusCode).toBe(statusCodes.notFound)
   })

@@ -2,14 +2,31 @@
 
 {% block content %}
   {{ appHeading({
-    text: heading,
-    caption: "aqie-dc-poc-frontend"
+    text: pageTitle
   }) }}
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <div class="govuk-body" data-testid="app-page-body">
-        <p></p>
+        <!-- Search by location -->
+        <p>
+          <a href="location-search" class="govuk-link">
+            {{ searchByLocation }}
+          </a>
+          <br>
+          {{ searchByLocationDescription }}
+        </p>
+
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+        <!-- Download data -->
+        <p>
+          <a href="download" class="govuk-link">
+            {{ downloadData }}
+          </a>
+          <br>
+          {{ downloadDataDescription }}
+        </p>
       </div>
     </div>
   </div>

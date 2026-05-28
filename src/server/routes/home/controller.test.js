@@ -1,5 +1,5 @@
-import { createServer } from '#/server/server.js'
-import { statusCodes } from '#/server/common/constants/status-codes.js'
+import { createServer } from '../../server.js'
+import { statusCodes } from '../../common/constants/status-codes.js'
 
 describe('#homeController', () => {
   let server
@@ -13,13 +13,54 @@ describe('#homeController', () => {
     await server.stop({ timeout: 0 })
   })
 
-  test('Should provide expected response', async () => {
+  test('Should provide expected response for English', async () => {
     const { result, statusCode } = await server.inject({
       method: 'GET',
-      url: '/'
+      url: '/uk-pollutant-release-and-transfer-register/en'
     })
 
-    expect(result).toEqual(expect.stringContaining('Home |'))
+    expect(result).toEqual(
+      expect.stringContaining(
+        'UK Pollutant Release and Transfer Register (PRTR) |'
+      )
+    )
     expect(statusCode).toBe(statusCodes.ok)
+  })
+
+  test('Should provide expected response for Welsh', async () => {
+    const { result, statusCode } = await server.inject({
+      method: 'GET',
+      url: '/uk-pollutant-release-and-transfer-register/cy'
+    })
+
+    expect(result).toEqual(
+      expect.stringContaining(
+        'UK Pollutant Release and Transfer Register (PRTR) --CY |'
+      )
+    )
+    expect(statusCode).toBe(statusCodes.ok)
+  })
+
+  test('Should provide expected response with default language when not specified', async () => {
+    const { result, statusCode } = await server.inject({
+      method: 'GET',
+      url: '/uk-pollutant-release-and-transfer-register'
+    })
+
+    expect(result).toEqual(
+      expect.stringContaining(
+        'UK Pollutant Release and Transfer Register (PRTR) |'
+      )
+    )
+    expect(statusCode).toBe(statusCodes.ok)
+  })
+
+  test('Should reject request with invalid language parameter', async () => {
+    const { statusCode } = await server.inject({
+      method: 'GET',
+      url: '/uk-pollutant-release-and-transfer-register/fr'
+    })
+
+    expect(statusCode).toBe(statusCodes.badRequest)
   })
 })
