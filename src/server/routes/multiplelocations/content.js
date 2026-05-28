@@ -4,7 +4,7 @@ export const content = {
     title: 'Locations matching',
     introText: 'More than one match was found for your location. Choose the correct location from the following options:',
     heading: 'We found multiple locations',
-    alternativeText: 'Alternatively,',
+    alternativeText: 'Or,',
     searchAgainLink: 'try searching again',
     noFacility: {
       pageTitle: 'No facilities found',
@@ -23,7 +23,7 @@ export const content = {
     title: 'Locations matching --CY',
     introText: 'More than one match was found for your location. Choose the correct location from the following options: --CY',
     heading: 'We found multiple locations --CY',
-    alternativeText: 'Alternatively, --CY',
+    alternativeText: 'Or, --CY',
     searchAgainLink: 'try searching again --CY',
     noFacility: {
       pageTitle: 'No facilities found --CY',
