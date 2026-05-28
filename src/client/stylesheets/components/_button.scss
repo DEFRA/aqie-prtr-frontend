@@ -1,0 +1,51 @@
+@use "govuk-frontend" as *;
+@use "../variables/button";
+
+.aq-button-secondary {
+    position: relative;
+    display: inline-block;
+    @include govuk-font($size: 16);
+    width: auto;
+    margin: 0px 0px 5px;
+    border: 1px solid button.$aq-button-secondary-border;
+    box-shadow: none;
+    background-color: white;
+    padding: button.$aq-button-secondary-padding;
+    outline: 3px solid transparent;
+    cursor: pointer;
+    color: $govuk-text-colour !important;
+    text-decoration: none;
+
+    &:visited {
+        color: $govuk-text-colour;
+    }
+
+    &:hover {
+        background-color: button.$aq-button-secondary-hover-bg;
+    }
+
+    &:focus {
+        background-color: $govuk-focus-colour;
+        border-color: $govuk-focus-colour;
+        box-shadow: 0 2px 0 $govuk-text-colour !important;
+        
+        .aq-button-secondary__text {
+            color: $govuk-text-colour;
+        }
+    }
+
+    &--icon {
+        padding-left: 31px;
+        
+        svg {
+            position: absolute;
+            left: button.$aq-button-secondary-icon-offset-left;
+            top: 50%;
+            margin-top: -#{button.$aq-button-secondary-icon-size};
+        }
+    }
+
+    &__text {
+        color: button.$aq-button-secondary-text;
+    }
+}
