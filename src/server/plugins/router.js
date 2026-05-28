@@ -4,7 +4,9 @@ import { home } from '../routes/home/index.js'
 import { about } from '../routes/about/index.js'
 import { health } from '../routes/health/index.js'
 import { serveStaticFiles } from './serve-static-files.js'
-import { config } from '../../config/config.js'
+import { config } from '#src/config/config.js'
+import { searchLocation } from '../routes/search-location/index.js'
+import { multiplelocations } from '../routes/multiplelocations/index.js'
 
 export const router = {
   plugin: {
@@ -16,7 +18,7 @@ export const router = {
       await server.register([health])
 
       // Application specific routes, add your own routes here
-      await server.register([home, about])
+      await server.register([home, about, searchLocation, multiplelocations])
 
       // Static assets
       if (!config.get('isProduction') && !config.get('isTest')) {

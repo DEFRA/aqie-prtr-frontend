@@ -1,0 +1,19 @@
+{% extends 'layouts/page.njk' %}
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">{{ heading }} for "{{ searchLocation }}"</h1>
+    <p class="govuk-body">{{ helpText }}</p>
+    <ul class="govuk-list">
+      {% for r in results %}
+        <li>
+          <a class="govuk-link"
+             href="/facilities?lng={{ r.lng }}&lat={{ r.lat }}&name={{ r.name | urlencode }}">
+            {{ r.name }}{% if r.districtBorough %}, {{ r.districtBorough }}{% endif %}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}
