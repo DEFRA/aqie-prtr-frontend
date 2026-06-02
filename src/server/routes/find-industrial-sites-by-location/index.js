@@ -2,12 +2,12 @@ import { searchLocationController } from './controller.js'
 
 export const searchLocation = {
   plugin: {
-    name: 'search-location',
+    name: 'find-industrial-sites-by-location',
     register(server) {
       server.route([
         {
           method: 'GET',
-          path: '/find-industrial-sites-by-locationn',
+          path: '/find-industrial-sites-by-location',
           ...searchLocationController
         },
         {
