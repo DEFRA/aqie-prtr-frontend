@@ -8,7 +8,9 @@ import { handleMultipleLocations } from '#src/server/routes/multiplelocations/co
 import { searchLocations } from '#src/server/common/api/locations.js'
 
 function buildResponseToolkit() {
-  const redirectChain = { takeover: vi.fn().mockReturnValue({ isRedirect: true }) }
+  const redirectChain = {
+    takeover: vi.fn().mockReturnValue({ isRedirect: true })
+  }
   return {
     view: vi.fn().mockReturnValue({}),
     redirect: vi.fn().mockReturnValue(redirectChain)
@@ -49,7 +51,7 @@ describe('handleMultipleLocations', () => {
     vi.clearAllMocks()
   })
 
-  it('redirects to /search-location when query is empty', async () => {
+  it('redirects to /find-industrial-sites-by-location when query is empty', async () => {
     const h = buildResponseToolkit()
 
     await handleMultipleLocations(
@@ -57,11 +59,13 @@ describe('handleMultipleLocations', () => {
       h
     )
 
-    expect(h.redirect).toHaveBeenCalledWith('/search-location')
+    expect(h.redirect).toHaveBeenCalledWith(
+      '/find-industrial-sites-by-location'
+    )
     expect(searchLocations).not.toHaveBeenCalled()
   })
 
-  it('redirects to /search-location when query contains forbidden special chars', async () => {
+  it('redirects to /find-industrial-sites-by-location when query contains forbidden special chars', async () => {
     const h = buildResponseToolkit()
 
     await handleMultipleLocations(
@@ -69,7 +73,9 @@ describe('handleMultipleLocations', () => {
       h
     )
 
-    expect(h.redirect).toHaveBeenCalledWith('/search-location')
+    expect(h.redirect).toHaveBeenCalledWith(
+      '/find-industrial-sites-by-location'
+    )
     expect(searchLocations).not.toHaveBeenCalled()
   })
 

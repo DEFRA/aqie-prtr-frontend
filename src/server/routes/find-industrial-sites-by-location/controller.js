@@ -12,7 +12,9 @@ const logger = createLogger()
  * @param {import('@hapi/hapi').ResponseToolkit} h
  */
 function handleSearchLocationGet(request, h) {
-  if (request.url.pathname === '/search-location/searchagain') {
+  if (
+    request.url.pathname === '/find-industrial-sites-by-location/searchagain'
+  ) {
     request.yar.clear('fullSearchQuery')
     request.yar.clear('locationsResult')
     request.yar.clear('facilitiesResult')

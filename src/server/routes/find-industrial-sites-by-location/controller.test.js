@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 
-import { handleSearchLocationGet } from '#src/server/routes/search-location/controller.js'
+import { handleSearchLocationGet } from '#src/server/routes/find-industrial-sites-by-location/controller.js'
 
 function buildResponseToolkit() {
   const h = { view: vi.fn().mockReturnValue({}) }
@@ -8,7 +8,7 @@ function buildResponseToolkit() {
 }
 
 function buildRequest({
-  pathname = '/search-location',
+  pathname = '/find-industrial-sites-by-location',
   yarStore = {},
   query = {}
 } = {}) {
@@ -53,7 +53,7 @@ describe('handleSearchLocationGet', () => {
       facilitiesResult: { count: 5 }
     }
     const request = buildRequest({
-      pathname: '/search-location/searchagain',
+      pathname: '/find-industrial-sites-by-location/searchagain',
       yarStore
     })
     const h = buildResponseToolkit()

@@ -7,17 +7,17 @@ export const searchLocation = {
       server.route([
         {
           method: 'GET',
-          path: '/search-location',
+          path: '/find-industrial-sites-by-locationn',
           ...searchLocationController
         },
         {
           method: 'POST',
-          path: '/search-location',
+          path: '/find-industrial-sites-by-location',
           ...searchLocationController
         },
         {
           method: 'GET',
-          path: '/search-location/searchagain',
+          path: '/find-industrial-sites-by-location/searchagain',
           ...searchLocationController
         }
       ])

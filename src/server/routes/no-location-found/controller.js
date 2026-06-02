@@ -3,7 +3,7 @@ import { createLogger } from '#src/server/common/helpers/logging/logger.js'
 import { content } from './content.js'
 
 const logger = createLogger()
-const TRY_AGAIN_PATH = '/search-location'
+const TRY_AGAIN_PATH = '/find-industrial-sites-by-location'
 
 /**
  * Render the no-location-found page. Reads the last attempted search from

@@ -2,7 +2,8 @@ export const content = {
   en: {
     pageTitle: 'Multiple locations',
     title: 'Locations matching',
-    introText: 'More than one match was found for your location. Choose the correct location from the following options:',
+    introText:
+      'More than one match was found for your location. Choose the correct location from the following options:',
     heading: 'We found multiple locations',
     alternativeText: 'Or,',
     searchAgainLink: 'try searching again',
@@ -21,7 +22,8 @@ export const content = {
   cy: {
     pageTitle: 'Multiple locations --CY',
     title: 'Locations matching --CY',
-    introText: 'More than one match was found for your location. Choose the correct location from the following options: --CY',
+    introText:
+      'More than one match was found for your location. Choose the correct location from the following options: --CY',
     heading: 'We found multiple locations --CY',
     alternativeText: 'Or, --CY',
     searchAgainLink: 'try searching again --CY',

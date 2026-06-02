@@ -8,7 +8,7 @@ const logger = createLogger()
 
 export const DEFAULT_RADIUS_MILES = 50
 const SPECIAL_CHAR_REGEX = /[^a-zA-Z0-9 \-_.',]/
-const TRY_AGAIN_PATH = '/search-location/searchagain'
+const TRY_AGAIN_PATH = '/find-industrial-sites-by-location/searchagain'
 const ERROR_SUMMARY_TITLE = 'There is a problem'
 
 function persistAndReadSearchValue(request) {
@@ -21,7 +21,7 @@ function persistAndReadSearchValue(request) {
 
 function setErrorRedirect(request, h, message) {
   setErrorMessage(request, ERROR_SUMMARY_TITLE, message)
-  return h.redirect('/search-location').takeover()
+  return h.redirect('/find-industrial-sites-by-location').takeover()
 }
 
 function renderMultiple(h, langContent, query, matches, radiusMiles) {
