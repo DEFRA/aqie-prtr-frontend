@@ -27,7 +27,7 @@ function handleSearchLocationGet(request, h) {
   request.yar.clear('errors')
   request.yar.clear('errorMessage')
 
-  return h.view('search-location/index', {
+  return h.view('find-industrial-sites-by-location/index', {
     ...content[lang],
     displayBackLink: true,
     fullSearchQuery: request.yar.get('fullSearchQuery'),
