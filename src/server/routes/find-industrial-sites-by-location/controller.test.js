@@ -37,7 +37,7 @@ describe('handleSearchLocationGet', () => {
     handleSearchLocationGet(buildRequest(), h)
 
     expect(h.view).toHaveBeenCalledWith(
-      'search-location/index',
+      'find-industrial-sites-by-location/index',
       expect.objectContaining({
         pageTitle: 'Search for a facility',
         heading: expect.any(String),
