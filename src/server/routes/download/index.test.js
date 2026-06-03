@@ -1,0 +1,72 @@
+import { createServer } from '../../server.js'
+import { statusCodes } from '../../common/constants/status-codes.js'
+import { vi } from 'vitest'
+
+vi.mock('#src/server/common/api/locations.js', () => ({
+  getYears: vi.fn().mockResolvedValue({
+    success: true,
+    count: 0,
+    years: []
+  })
+}))
+
+describe('download route', () => {
+  let server
+
+  beforeAll(async () => {
+    server = await createServer()
+    await server.initialize()
+  })
+
+  afterAll(async () => {
+    await server.stop({ timeout: 0 })
+  })
+
+  test('GET /download-all-data-for-a-year with default language (en)', async () => {
+    const { result, statusCode } = await server.inject({
+      method: 'GET',
+      url: '/download-all-data-for-a-year'
+    })
+
+    expect(result).toEqual(expect.stringContaining('Download Data'))
+    expect(statusCode).toBe(statusCodes.ok)
+  })
+
+  test('GET /download-all-data-for-a-year/en returns English content', async () => {
+    const { result, statusCode } = await server.inject({
+      method: 'GET',
+      url: '/download-all-data-for-a-year/en'
+    })
+
+    expect(result).toEqual(expect.stringContaining('Download Data'))
+    expect(statusCode).toBe(statusCodes.ok)
+  })
+
+  test('GET /download-all-data-for-a-year/cy returns Welsh content', async () => {
+    const { result, statusCode } = await server.inject({
+      method: 'GET',
+      url: '/download-all-data-for-a-year/cy'
+    })
+
+    expect(result).toEqual(expect.stringContaining('Download Data --CY'))
+    expect(statusCode).toBe(statusCodes.ok)
+  })
+
+  test('GET /download-all-data-for-a-year/fr rejects invalid language', async () => {
+    const { statusCode } = await server.inject({
+      method: 'GET',
+      url: '/download-all-data-for-a-year/fr'
+    })
+
+    expect(statusCode).toBe(statusCodes.badRequest)
+  })
+
+  test('GET /download-all-data-for-a-year/de rejects invalid language', async () => {
+    const { statusCode } = await server.inject({
+      method: 'GET',
+      url: '/download-all-data-for-a-year/de'
+    })
+
+    expect(statusCode).toBe(statusCodes.badRequest)
+  })
+})
