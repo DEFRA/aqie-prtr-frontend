@@ -1,31 +1,33 @@
-import { createServer } from '../../server.js'
-import { statusCodes } from '../../common/constants/status-codes.js'
-import { vi, describe, test, beforeAll, afterAll, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
 
 vi.mock('#src/server/common/api/locations.js', () => ({
   getYears: vi.fn()
 }))
 
+import { downloadController } from '#src/server/routes/download/controller.js'
 import { getYears } from '#src/server/common/api/locations.js'
 
-describe('#downloadController', () => {
-  let server
+function buildResponseToolkit() {
+  return {
+    view: vi.fn().mockReturnValue({})
+  }
+}
 
-  beforeAll(async () => {
-    server = await createServer()
-    await server.initialize()
-  })
+function buildRequest() {
+  return {
+    params: { language: 'en' }
+  }
+}
 
-  afterAll(async () => {
-    await server.stop({ timeout: 0 })
-  })
-
+describe('downloadController', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
 
-  test('Should provide expected response', async () => {
-    // Mock the getYears API to return test data
+  it('renders the download page with years data from the API', async () => {
+    const h = buildResponseToolkit()
+    const request = buildRequest()
+
     vi.mocked(getYears).mockResolvedValueOnce({
       success: true,
       count: 2,
@@ -45,26 +47,40 @@ describe('#downloadController', () => {
       ]
     })
 
-    const { result, statusCode } = await server.inject({
-      method: 'GET',
-      url: '/download-all-data-for-a-year'
-    })
+    await downloadController.handler(request, h)
 
-    expect(result).toEqual(expect.stringContaining('Download Data'))
-    expect(result).toEqual(expect.stringContaining('2023'))
-    expect(statusCode).toBe(statusCodes.ok)
+    expect(h.view).toHaveBeenCalledWith(
+      'download/index',
+      expect.objectContaining({
+        pageTitle: 'Download Data',
+        downloadLinks: expect.arrayContaining([
+          expect.objectContaining({
+            text: expect.stringContaining('2023'),
+            href: 'https://example.com/data/2023.xml'
+          }),
+          expect.objectContaining({
+            text: expect.stringContaining('2022'),
+            href: 'https://example.com/data/2022.xml'
+          })
+        ])
+      })
+    )
   })
 
-  test('Should handle API error gracefully', async () => {
-    // Mock the getYears API to throw an error
+  it('handles API errors gracefully and renders with empty download links', async () => {
+    const h = buildResponseToolkit()
+    const request = buildRequest()
+
     vi.mocked(getYears).mockRejectedValueOnce(new Error('API Error'))
 
-    const { result, statusCode } = await server.inject({
-      method: 'GET',
-      url: '/download-all-data-for-a-year'
-    })
+    await downloadController.handler(request, h)
 
-    // Should still render the page with empty download links
-    expect(statusCode).toBe(statusCodes.ok)
+    expect(h.view).toHaveBeenCalledWith(
+      'download/index',
+      expect.objectContaining({
+        pageTitle: 'Download Data',
+        downloadLinks: []
+      })
+    )
   })
 })
