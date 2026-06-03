@@ -18,7 +18,7 @@ export const downloadController = {
       yearsData = []
     }
 
-    const downloadLinks = [...yearsData].reverse().map(item => ({
+    const downloadLinks = [...yearsData].reverse().map((item) => ({
       text: `${content.downloadPrefix} ${item.year} ${content.dataSuffix}`,
       href: item.downloadLink
     }))
