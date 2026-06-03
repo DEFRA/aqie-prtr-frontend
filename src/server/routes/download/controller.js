@@ -19,10 +19,14 @@ export const downloadController = {
       yearsData = []
     }
 
-    const downloadLinks = [...yearsData].reverse().map((item) => ({
+    const downloadLinks = yearsData.map((item) => ({
       text: `${content.downloadPrefix} ${item.year} ${content.dataSuffix}`,
       href: item.downloadLink
     }))
+
+    const hrefq = request.params.language
+      ? `${HOME_PATH}/${language}`
+      : HOME_PATH
 
     return h.view('download/index', {
       pageTitle: content.pageTitle,

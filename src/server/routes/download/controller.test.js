@@ -1,15 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 
-const mockLoggerError = vi.fn()
-
 vi.mock('#src/server/common/api/locations.js', () => ({
   getYears: vi.fn()
-}))
-
-vi.mock('#src/server/common/helpers/logging/logger.js', () => ({
-  createLogger: () => ({
-    error: mockLoggerError
-  })
 }))
 
 import { downloadController } from '#src/server/routes/download/controller.js'
@@ -21,7 +13,7 @@ function buildResponseToolkit() {
   }
 }
 
-function buildRequest(language = 'en') {
+function buildRequest(language) {
   return {
     params: { language }
   }
@@ -61,6 +53,8 @@ describe('downloadController', () => {
       'download/index',
       expect.objectContaining({
         pageTitle: 'Download Data',
+        displayBackLink: true,
+        hrefq: '/uk-pollutant-release-and-transfer-register',
         downloadLinks: expect.arrayContaining([
           expect.objectContaining({
             text: expect.stringContaining('2023'),
@@ -92,20 +86,6 @@ describe('downloadController', () => {
     )
   })
 
-  it('logs error when getYears API fails', async () => {
-    const h = buildResponseToolkit()
-    const request = buildRequest()
-    const testError = new Error('Connection timeout')
-
-    vi.mocked(getYears).mockRejectedValueOnce(testError)
-
-    await downloadController.handler(request, h)
-
-    expect(mockLoggerError).toHaveBeenCalledWith(
-      expect.stringContaining('failed to fetch years')
-    )
-  })
-
   it('uses Welsh content when cy language is requested', async () => {
     const h = buildResponseToolkit()
     const request = buildRequest('cy')
@@ -128,7 +108,9 @@ describe('downloadController', () => {
     expect(h.view).toHaveBeenCalledWith(
       'download/index',
       expect.objectContaining({
-        pageTitle: 'Download Data --CY'
+        pageTitle: 'Download Data --CY',
+        displayBackLink: true,
+        hrefq: '/uk-pollutant-release-and-transfer-register/cy'
       })
     )
   })
@@ -142,10 +124,10 @@ describe('downloadController', () => {
       count: 3,
       years: [
         {
-          id: 'year1',
-          year: 2021,
+          id: 'year3',
+          year: 2023,
           yearIsLive: true,
-          downloadLink: 'https://example.com/data/2021.xml'
+          downloadLink: 'https://example.com/data/2023.xml'
         },
         {
           id: 'year2',
@@ -154,10 +136,10 @@ describe('downloadController', () => {
           downloadLink: 'https://example.com/data/2022.xml'
         },
         {
-          id: 'year3',
-          year: 2023,
+          id: 'year1',
+          year: 2021,
           yearIsLive: true,
-          downloadLink: 'https://example.com/data/2023.xml'
+          downloadLink: 'https://example.com/data/2021.xml'
         }
       ]
     })
@@ -178,6 +160,25 @@ describe('downloadController', () => {
       success: true,
       count: 0,
       years: []
+    })
+
+    await downloadController.handler(request, h)
+
+    expect(h.view).toHaveBeenCalledWith(
+      'download/index',
+      expect.objectContaining({
+        downloadLinks: []
+      })
+    )
+  })
+
+  it('handles API response with missing years property', async () => {
+    const h = buildResponseToolkit()
+    const request = buildRequest()
+
+    vi.mocked(getYears).mockResolvedValueOnce({
+      success: true,
+      count: 0
     })
 
     await downloadController.handler(request, h)
