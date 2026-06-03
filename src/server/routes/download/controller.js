@@ -3,6 +3,7 @@ import { createLogger } from '#src/server/common/helpers/logging/logger.js'
 import { downloadContent } from './content.js'
 
 const logger = createLogger()
+const HOME_PATH = '/uk-pollutant-release-and-transfer-register'
 
 export const downloadController = {
   async handler(request, h) {
@@ -26,7 +27,9 @@ export const downloadController = {
     return h.view('download/index', {
       pageTitle: content.pageTitle,
       description: content.description,
-      downloadLinks
+      downloadLinks,
+      displayBackLink: true,
+      hrefq
     })
   }
 }
