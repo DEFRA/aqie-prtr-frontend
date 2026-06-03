@@ -21,3 +21,20 @@ export async function searchLocations(query) {
   }
   return response.json()
 }
+
+/**
+ * Fetch available years from the backend.
+ *
+ * @returns {Promise<object>}
+ */
+export async function getYears() {
+  const url = `${baseUrl()}/years`
+  const response = await fetchWithRetry(
+    (signal) => fetch(url, { headers: defaultHeaders(), signal }),
+    { operationName: 'getYears' }
+  )
+  if (!response.ok) {
+    throw new Error(`getYears failed: ${response.status}`)
+  }
+  return response.json()
+}
