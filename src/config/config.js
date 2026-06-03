@@ -44,7 +44,7 @@ export const config = convict({
   serviceName: {
     doc: 'Applications Service Name',
     format: String,
-    default: 'Pollutant Release and Transfer Register'
+    default: 'aqie-prtr-frontend'
   },
   root: {
     doc: 'Project root',
@@ -179,7 +179,7 @@ export const config = convict({
     keyPrefix: {
       doc: 'Redis cache key prefix name used to isolate the cached results across multiple clients',
       format: String,
-      default: 'aqie-dc-poc-frontend:',
+      default: 'aqie-prtr-frontend:',
       env: 'REDIS_KEY_PREFIX'
     },
     useSingleInstanceCache: {
@@ -213,6 +213,14 @@ export const config = convict({
       format: String,
       default: 'x-cdp-request-id',
       env: 'TRACING_HEADER'
+    }
+  },
+  backend: {
+    url: {
+      doc: 'Backend URL',
+      format: 'url',
+      default: 'http://localhost:3001',
+      env: 'BACKEND_URL'
     }
   }
 })
