@@ -68,4 +68,4 @@ npm test -- src/server/common/components/button/template.test.js
 - Text is wrapped in `.aq-button-secondary__text` span for styling
 - Icon (if present) is positioned absolutely, doesn't affect content flow
 - Focus states use GOV.UK focus colour with sufficient contrast
-- Tested with jest-axe for accessibility violations
+- Covered by server-rendered component tests
