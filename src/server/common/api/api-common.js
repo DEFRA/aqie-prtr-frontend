@@ -1,8 +1,10 @@
 import { config } from '#src/config/config.js'
+import { statusCodes } from '#src/server/common/constants/status-codes.js'
 import { fetchWithRetry } from '#src/server/common/helpers/fetch-with-retry.js'
 import { createLogger } from '#src/server/common/helpers/logging/logger.js'
 
 const logger = createLogger()
+const ERROR_BODY_MAX_LENGTH = 200
 
 export function baseUrl() {
   return config.get('backend.url').replace(/\/$/, '')
@@ -42,12 +44,14 @@ export async function fetchJson(path, operationName) {
   if (!response.ok) {
     const text = await response.text()
     logger.error(
-      `[api.GET] ${path} -> ${response.status}: ${text.slice(0, 200)}`
+      `[api.GET] ${path} -> ${response.status}: ${text.slice(0, ERROR_BODY_MAX_LENGTH)}`
     )
     throw new Error(`${operationName} failed: ${response.status}`)
   }
 
-  if (response.status === 204) return null
+  if (response.status === statusCodes.noContent) {
+    return null
+  }
 
   return response.json()
 }
