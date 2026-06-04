@@ -20,7 +20,12 @@ vi.mock('#src/server/common/helpers/logging/logger.js', () => ({
   })
 }))
 
-import { baseUrl, defaultHeaders, buildUrl, fetchJson } from '#src/server/common/api/api-common.js'
+import {
+  baseUrl,
+  defaultHeaders,
+  buildUrl,
+  fetchJson
+} from '#src/server/common/api/api-common.js'
 import { fetchWithRetry } from '#src/server/common/helpers/fetch-with-retry.js'
 
 describe('api-common', () => {
@@ -61,10 +66,9 @@ describe('api-common', () => {
 
       const result = await fetchJson('/years', 'getYears')
 
-      expect(fetchWithRetry).toHaveBeenCalledWith(
-        expect.any(Function),
-        { operationName: 'getYears' }
-      )
+      expect(fetchWithRetry).toHaveBeenCalledWith(expect.any(Function), {
+        operationName: 'getYears'
+      })
       expect(result).toEqual(payload)
     })
 

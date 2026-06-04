@@ -11,4 +11,4 @@ export function searchLocations(query) {
     `/locations/search?q=${encodeURIComponent(query)}`,
     'searchLocations'
   )
- }
+}
