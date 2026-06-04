@@ -1,11 +1,11 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 
-vi.mock('#src/server/common/api/locations.js', () => ({
+vi.mock('#src/server/common/api/year-downloads.js', () => ({
   getYears: vi.fn()
 }))
 
 import { downloadController } from '#src/server/routes/download/controller.js'
-import { getYears } from '#src/server/common/api/locations.js'
+import { getYears } from '#src/server/common/api/year-downloads.js'
 
 function buildResponseToolkit() {
   return {

@@ -1,4 +1,4 @@
-import { getYears } from '#src/server/common/api/locations.js'
+import { getYears } from '#src/server/common/api/year-downloads.js'
 import { createLogger } from '#src/server/common/helpers/logging/logger.js'
 import { downloadContent } from './content.js'
 
