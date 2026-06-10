@@ -5,7 +5,10 @@ import { about } from '../routes/about/index.js'
 import { download } from '../routes/download/index.js'
 import { health } from '../routes/health/index.js'
 import { serveStaticFiles } from './serve-static-files.js'
-import { config } from '../../config/config.js'
+import { config } from '#src/config/config.js'
+import { searchLocation } from '../routes/find-industrial-sites-by-location/index.js'
+import { multiplelocations } from '../routes/multiplelocations/index.js'
+import { noLocationFound } from '../routes/no-location-found/index.js'
 
 export const router = {
   plugin: {
@@ -17,7 +20,14 @@ export const router = {
       await server.register([health])
 
       // Application specific routes, add your own routes here
-      await server.register([home, about, download])
+      await server.register([
+        home,
+        about,
+        searchLocation,
+        multiplelocations,
+        noLocationFound,
+        download
+      ])
 
       // Static assets
       if (!config.get('isProduction') && !config.get('isTest')) {
