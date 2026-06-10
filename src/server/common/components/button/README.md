@@ -18,17 +18,18 @@ Import and use the `appButtonSecondary` macro in your Nunjucks template:
 
 ## Parameters
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `href` | string | Yes | Link URL |
-| `text` | string | Yes | Button text |
-| `icon` | string | No | SVG markup for icon (renders left-aligned) |
-| `target` | string | No | Link target attribute (e.g., `_blank`) |
-| `rel` | string | No | Link rel attribute (e.g., `noopener noreferrer`) |
+| Parameter | Type   | Required | Description                                      |
+| --------- | ------ | -------- | ------------------------------------------------ |
+| `href`    | string | Yes      | Link URL                                         |
+| `text`    | string | Yes      | Button text                                      |
+| `icon`    | string | No       | SVG markup for icon (renders left-aligned)       |
+| `target`  | string | No       | Link target attribute (e.g., `_blank`)           |
+| `rel`     | string | No       | Link rel attribute (e.g., `noopener noreferrer`) |
 
 ## Examples
 
 ### Basic button
+
 ```njk
 {{ appButtonSecondary({
   href: "/download",
@@ -37,6 +38,7 @@ Import and use the `appButtonSecondary` macro in your Nunjucks template:
 ```
 
 ### With icon
+
 ```njk
 {{ appButtonSecondary({
   href: "/download",
@@ -50,6 +52,7 @@ Import and use the `appButtonSecondary` macro in your Nunjucks template:
 ## Styling
 
 Styles are defined in:
+
 - **Variables**: `src/client/stylesheets/variables/_button.scss`
 - **Component**: `src/client/stylesheets/components/_button.scss`
 
@@ -58,6 +61,7 @@ The component uses GOV.UK Frontend design tokens for colors, spacing, and typogr
 ## Testing
 
 Run tests with:
+
 ```bash
 npm test -- src/server/common/components/button/template.test.js
 ```

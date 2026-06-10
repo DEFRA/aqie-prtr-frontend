@@ -19,7 +19,9 @@ describe('Button component', () => {
     })
 
     test('Should contain expected button text', () => {
-      expect($button('.aq-button-secondary__text').text().trim()).toBe('Download')
+      expect($button('.aq-button-secondary__text').text().trim()).toBe(
+        'Download'
+      )
     })
 
     test('Should add icon class and render icon markup when provided', () => {
