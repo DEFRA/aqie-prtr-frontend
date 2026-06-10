@@ -1,0 +1,7 @@
+{% macro appButtonSecondary(params) %}
+    {%- include "./template.njk" -%}
+{% endmacro %}
+
+{% macro appButton(params) %}
+    {{- appButtonSecondary(params) -}}
+{% endmacro %}

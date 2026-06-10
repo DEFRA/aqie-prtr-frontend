@@ -2,6 +2,7 @@ import inert from '@hapi/inert'
 
 import { home } from '../routes/home/index.js'
 import { about } from '../routes/about/index.js'
+import { download } from '../routes/download/index.js'
 import { health } from '../routes/health/index.js'
 import { serveStaticFiles } from './serve-static-files.js'
 import { config } from '#src/config/config.js'
@@ -24,7 +25,8 @@ export const router = {
         about,
         searchLocation,
         multiplelocations,
-        noLocationFound
+        noLocationFound,
+        download
       ])
 
       // Static assets

@@ -1,0 +1,35 @@
+{% extends 'layouts/page.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% block content %}
+  {{ appHeading({
+    text: pageTitle
+  }) }}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <div class="govuk-body" data-testid="app-page-body">
+         {% if description %}
+          <p class="govuk-body">
+            {{ description }}
+          </p>
+        {% endif %}
+
+        <ul class="govuk-list">
+          {% for item in downloadLinks %}
+            <li class="govuk-!-margin-bottom-3">
+
+              {{ appButtonSecondary({
+                text: item.text,
+                href: item.href,
+                icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 20" width="18" height="18" aria-hidden="true"><path d="M1.929 9L7 14.071 12.071 9M7 14.071V1M1 18h12" fill="none" stroke="currentColor" stroke-width="2"></path></svg>'
+              }) }}
+
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
