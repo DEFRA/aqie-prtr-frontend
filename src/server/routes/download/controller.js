@@ -3,7 +3,7 @@ import {
   getDownloadLink
 } from '#src/server/common/api/year-downloads.js'
 import { createLogger } from '#src/server/common/helpers/logging/logger.js'
-import { toProxyHref } from './download-proxy.js' // TODO: remove when backend sends Content-Disposition: attachment
+import { toProxyHref } from './download-proxy.js' // Temporary proxy helper until backend serves attachment headers
 import { downloadContent } from './content.js'
 
 const logger = createLogger()

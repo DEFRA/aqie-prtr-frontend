@@ -1,5 +1,5 @@
 import { downloadController } from './controller.js'
-import { downloadFileController } from './download-proxy.js' // TODO: remove when backend sends Content-Disposition: attachment
+import { downloadFileController } from './download-proxy.js' // Temporary route until backend serves attachment headers
 
 const supportedLanguages = new Set(['en', 'cy'])
 
@@ -32,7 +32,7 @@ export const download = {
           },
           ...downloadController
         },
-        // TODO: remove this route when backend sends Content-Disposition: attachment
+        // Temporary proxy route until backend serves attachment headers
         {
           method: 'GET',
           path: '/download-all-data-for-a-year/file',

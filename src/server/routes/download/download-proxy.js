@@ -5,11 +5,12 @@
  * Content-Disposition: attachment so the browser saves the file rather
  * than rendering it inline.
  *
- * TODO: Remove this file (and the two references in index.js / controller.js)
- *       once the backend sends the correct Content-Disposition header itself.
+ * Remove this file (and the two references in index.js / controller.js)
+ * once the backend sends the correct Content-Disposition header itself.
  */
 import { Readable } from 'node:stream'
 import { createLogger } from '#src/server/common/helpers/logging/logger.js'
+import { statusCodes } from '#src/server/common/constants/status-codes.js'
 
 const logger = createLogger()
 
@@ -52,11 +53,11 @@ export async function handleDownloadFile(request, h) {
   try {
     parsedUrl = new URL(url)
   } catch {
-    return h.response('Invalid download URL').code(400)
+    return h.response('Invalid download URL').code(statusCodes.badRequest)
   }
 
   if (parsedUrl.protocol !== 'https:') {
-    return h.response('Download URL must use https').code(400)
+    return h.response('Download URL must use https').code(statusCodes.badRequest)
   }
 
   try {
@@ -66,7 +67,7 @@ export async function handleDownloadFile(request, h) {
       logger.error(
         `[download] upstream download failed: ${upstream.status} ${parsedUrl.toString()}`
       )
-      return h.response('Unable to download file').code(502)
+      return h.response('Unable to download file').code(statusCodes.badGateway)
     }
 
     const stream = Readable.fromWeb(upstream.body)
@@ -81,7 +82,7 @@ export async function handleDownloadFile(request, h) {
       .header('Cache-Control', 'no-store')
   } catch (error) {
     logger.error(`[download] proxy failed: ${error.message}`)
-    return h.response('Unable to download file').code(502)
+    return h.response('Unable to download file').code(statusCodes.badGateway)
   }
 }
 
