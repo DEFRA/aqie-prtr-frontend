@@ -45,7 +45,9 @@ describe('getDownloadLink', () => {
   })
 
   it('calls fetchJson with the correct path and operation name', async () => {
-    fetchJson.mockResolvedValue({ downloadLink: 'https://example.com/data/2025.xml' })
+    fetchJson.mockResolvedValue({
+      downloadLink: 'https://example.com/data/2025.xml'
+    })
 
     await getDownloadLink(2025)
 

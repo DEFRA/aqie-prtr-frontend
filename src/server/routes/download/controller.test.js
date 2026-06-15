@@ -195,5 +195,4 @@ describe('downloadController', () => {
       })
     )
   })
-
 })

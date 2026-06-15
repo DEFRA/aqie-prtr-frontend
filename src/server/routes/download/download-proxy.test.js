@@ -35,7 +35,9 @@ describe('handleDownloadFile', () => {
       ok: true,
       status: 200,
       body: stream,
-      headers: { get: (name) => (name === 'content-type' ? 'application/xml' : null) }
+      headers: {
+        get: (name) => (name === 'content-type' ? 'application/xml' : null)
+      }
     })
 
     const { h, response } = buildH()
@@ -44,7 +46,9 @@ describe('handleDownloadFile', () => {
       h
     )
 
-    expect(global.fetch).toHaveBeenCalledWith('https://example.com/data/2023.xml')
+    expect(global.fetch).toHaveBeenCalledWith(
+      'https://example.com/data/2023.xml'
+    )
     expect(response.type).toHaveBeenCalledWith('application/xml')
     expect(response.header).toHaveBeenCalledWith(
       'Content-Disposition',
