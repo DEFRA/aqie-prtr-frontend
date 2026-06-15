@@ -57,7 +57,9 @@ export async function handleDownloadFile(request, h) {
   }
 
   if (parsedUrl.protocol !== 'https:') {
-    return h.response('Download URL must use https').code(statusCodes.badRequest)
+    return h
+      .response('Download URL must use https')
+      .code(statusCodes.badRequest)
   }
 
   try {
