@@ -7,7 +7,8 @@ vi.mock('#src/server/common/api/year-downloads.js', () => ({
     success: true,
     count: 0,
     years: []
-  })
+  }),
+  getDownloadLink: vi.fn()
 }))
 
 describe('download route', () => {

@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 
 vi.mock('#src/server/common/api/year-downloads.js', () => ({
-  getYears: vi.fn()
+  getYears: vi.fn(),
+  getDownloadLink: vi.fn()
 }))
 
 vi.mock('#src/server/routes/download/download-proxy.js', () => ({
