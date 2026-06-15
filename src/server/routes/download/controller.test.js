@@ -10,7 +10,10 @@ vi.mock('#src/server/routes/download/download-proxy.js', () => ({
 }))
 
 import { downloadController } from '#src/server/routes/download/controller.js'
-import { getYears } from '#src/server/common/api/year-downloads.js'
+import {
+  getYears,
+  getDownloadLink
+} from '#src/server/common/api/year-downloads.js'
 
 function buildResponseToolkit() {
   return {
@@ -50,6 +53,12 @@ describe('downloadController', () => {
           downloadLink: 'https://example.com/data/2022.xml'
         }
       ]
+    })
+    vi.mocked(getDownloadLink).mockResolvedValueOnce({
+      downloadLink: 'https://example.com/data/2023.xml'
+    })
+    vi.mocked(getDownloadLink).mockResolvedValueOnce({
+      downloadLink: 'https://example.com/data/2022.xml'
     })
 
     await downloadController.handler(request, h)
@@ -106,6 +115,9 @@ describe('downloadController', () => {
           downloadLink: 'https://example.com/data/2023.xml'
         }
       ]
+    })
+    vi.mocked(getDownloadLink).mockResolvedValueOnce({
+      downloadLink: 'https://example.com/data/2023.xml'
     })
 
     await downloadController.handler(request, h)
