@@ -1,5 +1,6 @@
 import { getYears } from '#src/server/common/api/year-downloads.js'
 import { createLogger } from '#src/server/common/helpers/logging/logger.js'
+import { toProxyHref } from './download-proxy.js' // TODO: remove when backend sends Content-Disposition: attachment
 import { downloadContent } from './content.js'
 
 const logger = createLogger()
@@ -20,7 +21,7 @@ async function handleDownloads(request, h) {
 
   const downloadLinks = yearsData.map((item) => ({
     text: `${content.downloadPrefix} ${item.year} ${content.dataSuffix}`,
-    href: item.downloadLink
+    href: toProxyHref(item.downloadLink, item.year)
   }))
 
   const hrefq = request.params.language ? `${HOME_PATH}/${language}` : HOME_PATH

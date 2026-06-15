@@ -4,6 +4,10 @@ vi.mock('#src/server/common/api/year-downloads.js', () => ({
   getYears: vi.fn()
 }))
 
+vi.mock('#src/server/routes/download/download-proxy.js', () => ({
+  toProxyHref: (url) => url
+}))
+
 import { downloadController } from '#src/server/routes/download/controller.js'
 import { getYears } from '#src/server/common/api/year-downloads.js'
 
@@ -190,4 +194,5 @@ describe('downloadController', () => {
       })
     )
   })
+
 })

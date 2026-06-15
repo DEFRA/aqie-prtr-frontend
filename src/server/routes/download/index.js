@@ -1,4 +1,5 @@
 import { downloadController } from './controller.js'
+import { downloadFileController } from './download-proxy.js' // TODO: remove when backend sends Content-Disposition: attachment
 
 const supportedLanguages = new Set(['en', 'cy'])
 
@@ -30,6 +31,27 @@ export const download = {
             }
           },
           ...downloadController
+        },
+        // TODO: remove this route when backend sends Content-Disposition: attachment
+        {
+          method: 'GET',
+          path: '/download-all-data-for-a-year/file',
+          options: {
+            validate: {
+              query: (query) => {
+                if (!query.url || typeof query.url !== 'string') {
+                  throw new Error('Missing required query parameter: url')
+                }
+
+                if (query.year && !/^\d{4}$/.test(String(query.year))) {
+                  throw new Error('Invalid year format')
+                }
+
+                return query
+              }
+            }
+          },
+          ...downloadFileController
         }
       ])
     }
