@@ -26,7 +26,7 @@ export function context(request) {
   return {
     assetPath: `${assetPath}/assets`,
     serviceName: config.get('serviceName'),
-    serviceDisplayName: 'Pollutant Release and Transfer Register',
+    serviceDisplayName: 'Search industrial pollutant emissions',
     serviceUrl: '/',
     breadcrumbs: [],
     navigation: buildNavigation(request),

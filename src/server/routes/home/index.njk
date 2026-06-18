@@ -1,34 +1,33 @@
 {% extends 'layouts/page.njk' %}
-
 {% block content %}
   {{ appHeading({
     text: pageTitle
   }) }}
-
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <div class="govuk-body" data-testid="app-page-body">
         <!-- Search by location -->
-        <p>
-          <a href="/find-industrial-sites-by-location" class="govuk-link">
-            {{ searchByLocation }}
-          </a>
-          <br>
-          {{ searchByLocationDescription }}
-        </p>
+        {# <p>
+                          <a href="/find-industrial-sites-by-location" class="govuk-link">
+                            {{ searchByLocation }}
+                          </a>
+                          <br>
+                          {{ searchByLocationDescription }}
+                        </p>
 
-        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+        #}
 
         <!-- Download data -->
-        <p>
-          <a href="/download-all-data-for-a-year/{{ language }}" class="govuk-link">
+          <p>
+            {{ downloadDataDescription }}
+          </p>
+          <p>
             {{ downloadData }}
+            <a href="/download-all-data-for-a-year/{{ language }}" class="govuk-link"> {{ downloadDataLinkText }}
           </a>
-          <br>
-          {{ downloadDataDescription }}
-        </p>
+          </p>
+        </div>
       </div>
     </div>
-  </div>
-
-{% endblock %}
+  {% endblock %}

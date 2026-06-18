@@ -71,7 +71,7 @@ describe('context and cache', () => {
               href: '/about'
             }
           ],
-          serviceDisplayName: 'Pollutant Release and Transfer Register',
+          serviceDisplayName: 'Search industrial pollutant emissions',
           serviceName: 'aqie-prtr-frontend',
           serviceUrl: '/'
         })
@@ -161,7 +161,7 @@ describe('context and cache', () => {
               href: '/about'
             }
           ],
-          serviceDisplayName: 'Pollutant Release and Transfer Register',
+          serviceDisplayName: 'Search industrial pollutant emissions',
           serviceName: 'aqie-prtr-frontend',
           serviceUrl: '/'
         })
