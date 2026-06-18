@@ -22,26 +22,25 @@ async function handleDownloads(request, h) {
     yearsData = []
   }
 
-  const downloadLinks = await Promise.all(
-    yearsData.map(async (item) => {
-      try {
-        const response = await getDownloadLink(item.year)
-        const link = response.downloadLink
-        return {
-          text: `${content.downloadPrefix} ${item.year} ${content.dataSuffix}`,
-          href: toProxyHref(link, item.year)
+  const downloadLinks = (await Promise.all(
+    yearsData
+      .filter((item) => item.reportIsLive === true)
+      .map(async (item) => {
+        try {
+          const response = await getDownloadLink(item.year)
+          const link = response.downloadLink
+          return {
+            text: `${content.downloadPrefix} ${item.year} ${content.dataSuffix}`,
+            href: toProxyHref(link, item.year)
+          }
+        } catch (error) {
+          logger.error(
+            `[download] failed to fetch download link for year ${item.year}: ${error.message}`
+          )
+          return null
         }
-      } catch (error) {
-        logger.error(
-          `[download] failed to fetch download link for year ${item.year}: ${error.message}`
-        )
-        return {
-          text: `${content.downloadPrefix} ${item.year} ${content.dataSuffix}`,
-          href: null //need to handle this
-        }
-      }
-    })
-  )
+      })
+  )).filter(Boolean)
 
   const hrefq = request.params.language ? `${HOME_PATH}/${language}` : HOME_PATH
 
