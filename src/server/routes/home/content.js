@@ -1,16 +1,21 @@
 export const homeContent = {
   en: {
-    pageTitle: 'UK Pollutant Release and Transfer Register (PRTR)',
+    pageTitle: 'Search industrial pollutant emissions',
     searchByLocation: 'Search by location',
     searchByLocationDescription: 'Some descriptive information here?',
-    downloadData: 'Download all data for a year',
-    downloadDataDescription: 'Some descriptive information here?'
+    downloadData: 'You can',
+    downloadDataLinkText:
+      'download industrial emissions and waste transfer data.',
+    downloadDataDescription: `This site is under development. We're building new search and review functionality for UK Pollutant Release and Transfer Register (PRTR) datasets.`
   },
   cy: {
-    pageTitle: 'UK Pollutant Release and Transfer Register (PRTR) --CY',
+    pageTitle: 'Search industrial pollutant emissions --CY',
     searchByLocation: 'Search by location --CY',
     searchByLocationDescription: 'Some descriptive information here? --CY',
-    downloadData: 'Download all data for a year --CY',
-    downloadDataDescription: 'Some descriptive information here? --CY'
+    downloadData: 'You can --CY',
+    downloadDataLinkText:
+      'download industrial emissions and waste transfer data. --CY',
+    downloadDataDescription:
+      "This site is under development. We're building new search and review functionality for UK Pollutant Release and Transfer Register (PRTR) datasets. --CY"
   }
 }

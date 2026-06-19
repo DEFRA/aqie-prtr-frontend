@@ -66,7 +66,7 @@ describe('downloadController', () => {
     expect(h.view).toHaveBeenCalledWith(
       'download/index',
       expect.objectContaining({
-        pageTitle: 'Download Data',
+        pageTitle: 'Download all data for a year',
         displayBackLink: true,
         hrefq: '/uk-pollutant-release-and-transfer-register',
         downloadLinks: expect.arrayContaining([
@@ -94,7 +94,7 @@ describe('downloadController', () => {
     expect(h.view).toHaveBeenCalledWith(
       'download/index',
       expect.objectContaining({
-        pageTitle: 'Download Data',
+        pageTitle: 'Download all data for a year',
         downloadLinks: []
       })
     )
@@ -125,7 +125,7 @@ describe('downloadController', () => {
     expect(h.view).toHaveBeenCalledWith(
       'download/index',
       expect.objectContaining({
-        pageTitle: 'Download Data --CY',
+        pageTitle: 'Download all data for a year --CY',
         displayBackLink: true,
         hrefq: '/uk-pollutant-release-and-transfer-register/cy'
       })

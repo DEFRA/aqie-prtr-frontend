@@ -1,13 +1,14 @@
 export const downloadContent = {
   en: {
-    pageTitle: 'Download Data',
-    description: 'Some information on what the downloads will contain?',
+    pageTitle: 'Download all data for a year',
+    description: 'Download all PRTR data for a reporting year as an XML file.',
     downloadPrefix: 'Download',
     dataSuffix: 'data'
   },
   cy: {
-    pageTitle: 'Download Data --CY',
-    description: 'Some information on what the downloads will contain? --CY',
+    pageTitle: 'Download all data for a year --CY',
+    description:
+      'Download all PRTR data for a reporting year as an XML file. --CY',
     downloadPrefix: 'Download --CY',
     dataSuffix: 'data --CY'
   }

@@ -10,6 +10,7 @@ export const homeController = {
       searchByLocation: content.searchByLocation,
       searchByLocationDescription: content.searchByLocationDescription,
       downloadData: content.downloadData,
+      downloadDataLinkText: content.downloadDataLinkText,
       downloadDataDescription: content.downloadDataDescription,
       language
     })
