@@ -5,37 +5,37 @@ vi.mock('#src/server/common/api/api-common.js', () => ({
 }))
 
 import {
-  getYears,
+  getReports,
   getDownloadLink
-} from '#src/server/common/api/year-downloads.js'
+} from '#src/server/common/api/reports.js'
 import { fetchJson } from '#src/server/common/api/api-common.js'
 
-describe('getYears', () => {
+describe('getReports', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
 
   it('calls fetchJson with the correct path and operation name', async () => {
-    fetchJson.mockResolvedValue({ years: [] })
+    fetchJson.mockResolvedValue({ results: [] })
 
-    await getYears()
+    await getReports()
 
-    expect(fetchJson).toHaveBeenCalledWith('/years', 'getYears')
+    expect(fetchJson).toHaveBeenCalledWith('/reports', 'getReports')
   })
 
   it('returns the parsed JSON on success', async () => {
-    const payload = { years: [{ year: 2025, url: '/downloads/2025.xml' }] }
+    const payload = { results: [{ year: 2025, url: '/downloads/2025.xml' }] }
     fetchJson.mockResolvedValue(payload)
 
-    const result = await getYears()
+    const result = await getReports()
 
     expect(result).toEqual(payload)
   })
 
   it('propagates errors from fetchJson', async () => {
-    fetchJson.mockRejectedValue(new Error('getYears failed: 500'))
+    fetchJson.mockRejectedValue(new Error('getReports failed: 500'))
 
-    await expect(getYears()).rejects.toThrow(/500/)
+    await expect(getReports()).rejects.toThrow(/500/)
   })
 })
 
@@ -52,7 +52,7 @@ describe('getDownloadLink', () => {
     await getDownloadLink(2025)
 
     expect(fetchJson).toHaveBeenCalledWith(
-      '/years/get-download-link/2025',
+      '/reports/get-download-link/2025',
       'getDownloadLink'
     )
   })
