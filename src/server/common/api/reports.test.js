@@ -4,10 +4,7 @@ vi.mock('#src/server/common/api/api-common.js', () => ({
   fetchJson: vi.fn()
 }))
 
-import {
-  getReports,
-  getDownloadLink
-} from '#src/server/common/api/reports.js'
+import { getReports, getDownloadLink } from '#src/server/common/api/reports.js'
 import { fetchJson } from '#src/server/common/api/api-common.js'
 
 describe('getReports', () => {

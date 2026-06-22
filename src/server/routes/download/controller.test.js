@@ -10,10 +10,7 @@ vi.mock('#src/server/routes/download/download-proxy.js', () => ({
 }))
 
 import { downloadController } from '#src/server/routes/download/controller.js'
-import {
-  getReports,
-  getDownloadLink
-} from '#src/server/common/api/reports.js'
+import { getReports, getDownloadLink } from '#src/server/common/api/reports.js'
 
 function buildResponseToolkit() {
   return {
@@ -92,7 +89,9 @@ describe('downloadController', () => {
 
     await downloadController.handler(request, h)
 
-    expect(h.redirect).toHaveBeenCalledWith('/problem-with-service?statusCode=500')
+    expect(h.redirect).toHaveBeenCalledWith(
+      '/problem-with-service?statusCode=500'
+    )
     expect(h.view).toHaveBeenCalledWith(
       'download/index',
       expect.objectContaining({
