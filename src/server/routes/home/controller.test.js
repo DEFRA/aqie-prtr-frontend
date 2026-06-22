@@ -20,9 +20,7 @@ describe('#homeController', () => {
     })
 
     expect(result).toEqual(
-      expect.stringContaining(
-        'UK Pollutant Release and Transfer Register (PRTR) |'
-      )
+      expect.stringContaining('Search industrial pollutant emissions |')
     )
     expect(statusCode).toBe(statusCodes.ok)
   })
@@ -34,9 +32,7 @@ describe('#homeController', () => {
     })
 
     expect(result).toEqual(
-      expect.stringContaining(
-        'UK Pollutant Release and Transfer Register (PRTR) --CY |'
-      )
+      expect.stringContaining('Search industrial pollutant emissions --CY |')
     )
     expect(statusCode).toBe(statusCodes.ok)
   })
@@ -48,9 +44,7 @@ describe('#homeController', () => {
     })
 
     expect(result).toEqual(
-      expect.stringContaining(
-        'UK Pollutant Release and Transfer Register (PRTR) |'
-      )
+      expect.stringContaining('Search industrial pollutant emissions |')
     )
     expect(statusCode).toBe(statusCodes.ok)
   })

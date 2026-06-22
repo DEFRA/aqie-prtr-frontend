@@ -68,7 +68,6 @@ describe('downloadController', () => {
       'download/index',
       expect.objectContaining({
         pageTitle: 'Download all data for a year',
-        description: 'Some information on what the downloads will contain?',
         displayBackLink: true,
         hrefq: '/uk-pollutant-release-and-transfer-register',
         downloadLinks: expect.arrayContaining([
@@ -94,6 +93,13 @@ describe('downloadController', () => {
     await downloadController.handler(request, h)
 
     expect(h.redirect).toHaveBeenCalledWith('/problem-with-service?statusCode=500')
+    expect(h.view).toHaveBeenCalledWith(
+      'download/index',
+      expect.objectContaining({
+        pageTitle: 'Download all data for a year',
+        downloadLinks: []
+      })
+    )
   })
 
   it('uses Welsh content when cy language is requested', async () => {
@@ -122,7 +128,6 @@ describe('downloadController', () => {
       'download/index',
       expect.objectContaining({
         pageTitle: 'Download all data for a year --CY',
-        description: 'Some information on what the downloads will contain? --CY',
         displayBackLink: true,
         hrefq: '/uk-pollutant-release-and-transfer-register/cy',
         downloadLinks: expect.arrayContaining([
