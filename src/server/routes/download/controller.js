@@ -19,9 +19,9 @@ async function handleDownloads(request, h) {
     reportsData = response.results || []
   } catch (error) {
     logger.error(`[download] failed to fetch reports: ${error.message}`)
-    reportsData = []
+    return h.redirect('/problem-with-service?statusCode=500')
   }
-
+  
   const downloadLinks = (await Promise.all(
     reportsData
       .filter((item) => item.reportIsLive === true)
