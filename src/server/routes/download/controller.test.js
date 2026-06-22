@@ -17,7 +17,8 @@ import {
 
 function buildResponseToolkit() {
   return {
-    view: vi.fn().mockReturnValue({})
+    view: vi.fn().mockReturnValue({}),
+    redirect: vi.fn().mockReturnValue({})
   }
 }
 
@@ -66,16 +67,17 @@ describe('downloadController', () => {
     expect(h.view).toHaveBeenCalledWith(
       'download/index',
       expect.objectContaining({
-        pageTitle: 'Download Data',
+        pageTitle: 'Download all data for a year',
+        description: 'Some information on what the downloads will contain?',
         displayBackLink: true,
         hrefq: '/uk-pollutant-release-and-transfer-register',
         downloadLinks: expect.arrayContaining([
           expect.objectContaining({
-            text: expect.stringContaining('2023'),
+            text: 'Download 2023 data',
             href: 'https://example.com/data/2023.xml'
           }),
           expect.objectContaining({
-            text: expect.stringContaining('2022'),
+            text: 'Download 2022 data',
             href: 'https://example.com/data/2022.xml'
           })
         ])
@@ -83,7 +85,7 @@ describe('downloadController', () => {
     )
   })
 
-  it('handles API errors gracefully and renders with empty download links', async () => {
+  it('handles API errors gracefully and redirects to error page', async () => {
     const h = buildResponseToolkit()
     const request = buildRequest()
 
@@ -91,13 +93,7 @@ describe('downloadController', () => {
 
     await downloadController.handler(request, h)
 
-    expect(h.view).toHaveBeenCalledWith(
-      'download/index',
-      expect.objectContaining({
-        pageTitle: 'Download Data',
-        downloadLinks: []
-      })
-    )
+    expect(h.redirect).toHaveBeenCalledWith('/problem-with-service?statusCode=500')
   })
 
   it('uses Welsh content when cy language is requested', async () => {
@@ -125,9 +121,16 @@ describe('downloadController', () => {
     expect(h.view).toHaveBeenCalledWith(
       'download/index',
       expect.objectContaining({
-        pageTitle: 'Download Data --CY',
+        pageTitle: 'Download all data for a year --CY',
+        description: 'Some information on what the downloads will contain? --CY',
         displayBackLink: true,
-        hrefq: '/uk-pollutant-release-and-transfer-register/cy'
+        hrefq: '/uk-pollutant-release-and-transfer-register/cy',
+        downloadLinks: expect.arrayContaining([
+          expect.objectContaining({
+            text: 'Download --CY 2023 data --CY',
+            href: 'https://example.com/data/2023.xml'
+          })
+        ])
       })
     )
   })
