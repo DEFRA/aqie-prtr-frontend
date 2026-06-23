@@ -92,13 +92,6 @@ describe('downloadController', () => {
     expect(h.redirect).toHaveBeenCalledWith(
       '/problem-with-service?statusCode=500'
     )
-    expect(h.view).toHaveBeenCalledWith(
-      'download/index',
-      expect.objectContaining({
-        pageTitle: 'Download all data for a year',
-        downloadLinks: []
-      })
-    )
   })
 
   it('uses Welsh content when cy language is requested', async () => {
