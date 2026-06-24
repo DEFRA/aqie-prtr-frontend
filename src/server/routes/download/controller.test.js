@@ -52,12 +52,6 @@ describe('downloadController', () => {
         }
       ]
     })
-    vi.mocked(getDownloadLink).mockResolvedValueOnce({
-      downloadLink: 'https://example.com/data/2023.xml'
-    })
-    vi.mocked(getDownloadLink).mockResolvedValueOnce({
-      downloadLink: 'https://example.com/data/2022.xml'
-    })
 
     await downloadController.handler(request, h)
 
@@ -70,15 +64,18 @@ describe('downloadController', () => {
         downloadLinks: expect.arrayContaining([
           expect.objectContaining({
             text: 'Download 2023 data',
-            href: 'https://example.com/data/2023.xml'
+            href: '/download-all-data-for-a-year/file/2023'
           }),
           expect.objectContaining({
             text: 'Download 2022 data',
-            href: 'https://example.com/data/2022.xml'
+            href: '/download-all-data-for-a-year/file/2022'
           })
         ])
       })
     )
+
+    // getDownloadLink should NOT be called on page load
+    expect(getDownloadLink).not.toHaveBeenCalled()
   })
 
   it('handles API errors gracefully and redirects to error page', async () => {
@@ -110,9 +107,6 @@ describe('downloadController', () => {
         }
       ]
     })
-    vi.mocked(getDownloadLink).mockResolvedValueOnce({
-      downloadLink: 'https://example.com/data/2023.xml'
-    })
 
     await downloadController.handler(request, h)
 
@@ -125,7 +119,7 @@ describe('downloadController', () => {
         downloadLinks: expect.arrayContaining([
           expect.objectContaining({
             text: 'Download --CY 2023 data --CY',
-            href: 'https://example.com/data/2023.xml'
+            href: '/download-all-data-for-a-year/file/2023'
           })
         ])
       })
@@ -159,15 +153,6 @@ describe('downloadController', () => {
           downloadLink: 'https://example.com/data/2023.xml'
         }
       ]
-    })
-    vi.mocked(getDownloadLink).mockResolvedValueOnce({
-      downloadLink: 'https://example.com/data/2021.xml'
-    })
-    vi.mocked(getDownloadLink).mockResolvedValueOnce({
-      downloadLink: 'https://example.com/data/2022.xml'
-    })
-    vi.mocked(getDownloadLink).mockResolvedValueOnce({
-      downloadLink: 'https://example.com/data/2023.xml'
     })
 
     await downloadController.handler(request, h)

@@ -1,5 +1,5 @@
 import { downloadController } from './controller.js'
-import { downloadFileController } from './download-proxy.js' // Temporary route until backend serves attachment headers
+import { downloadController as downloadGetController } from './download-proxy.js'
 
 const supportedLanguages = new Set(['en', 'cy'])
 
@@ -32,26 +32,24 @@ export const download = {
           },
           ...downloadController
         },
-        // Temporary proxy route until backend serves attachment headers
+        // TEMPORARY: Route to fetch presigned URL and stream file with proper headers
+        // TODO: Once backend sends Content-Disposition: attachment headers,
+        // the frontend can redirect directly to the presigned URL without this route.
+        // This handler can be removed and controller links can point to backend directly
         {
           method: 'GET',
-          path: '/download-all-data-for-a-year/file',
+          path: '/download-all-data-for-a-year/file/{year}',
           options: {
             validate: {
-              query: (query) => {
-                if (!query.url || typeof query.url !== 'string') {
-                  throw new Error('Missing required query parameter: url')
-                }
-
-                if (query.year && !/^\d{4}$/.test(String(query.year))) {
+              params: (params) => {
+                if (!/^\d{4}$/.test(String(params.year))) {
                   throw new Error('Invalid year format')
                 }
-
-                return query
+                return params
               }
             }
           },
-          ...downloadFileController
+          ...downloadGetController
         }
       ])
     }
