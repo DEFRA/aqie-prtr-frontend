@@ -9,6 +9,7 @@ import { config } from '#src/config/config.js'
 import { searchLocation } from '../routes/find-industrial-sites-by-location/index.js'
 import { multiplelocations } from '../routes/multiplelocations/index.js'
 import { noLocationFound } from '../routes/no-location-found/index.js'
+import { facilities } from '../routes/facilities/index.js'
 
 export const router = {
   plugin: {
@@ -26,7 +27,8 @@ export const router = {
         searchLocation,
         multiplelocations,
         noLocationFound,
-        download
+        download,
+        facilities
       ])
 
       // Static assets
