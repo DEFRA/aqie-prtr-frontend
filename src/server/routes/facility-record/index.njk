@@ -1,0 +1,102 @@
+{% extends 'layouts/page.njk' %}
+{% macro pollutantTable(rows, table, totalLabel) %}
+  <table class="govuk-table">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header">{{ table.pollutant }}</th>
+        <th scope="col" class="govuk-table__header">{{ totalLabel }}</th>
+        <th scope="col" class="govuk-table__header">{{ table.threshold }}</th>
+        <th scope="col" class="govuk-table__header">{{ table.additionalDetail }}</th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+      {% for row in rows %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            <a class="govuk-link" href="{{ row.detailHref }}">{{ row.pollutant }}</a>
+          </td>
+          <td class="govuk-table__cell">{{ row.total }}</td>
+          <td class="govuk-table__cell">{{ row.threshold }}</td>
+          <td class="govuk-table__cell">
+            <a class="govuk-link" href="{{ row.detailHref }}">{{ table.viewDetails }}</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endmacro %}
+{% block content %}
+  {{ appHeading({ text: facility.name }) }}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <p class="govuk-body">
+        <a class="govuk-link" href="{{ detailsHref }}">{{ links.facilityDetails }}</a>
+      </p>
+      <p class="govuk-body">
+        <a class="govuk-link" href="{{ competentAuthorityHref }}">{{ links.competentAuthority }}</a>
+      </p>
+      <p class="govuk-body govuk-!-margin-bottom-6">
+        <a class="govuk-link" href="/find-industrial-sites-by-location">{{ links.startNewSearch }}</a>
+      </p>
+      <h2 class="govuk-heading-l">{{ releasesHeading }}</h2>
+      <nav class="govuk-!-margin-bottom-6" aria-label="Reporting year" data-testid="year-tabs">
+        {% for tab in yearTabs %}
+          {% if tab.current %}
+            <span class="govuk-!-font-weight-bold govuk-!-margin-right-3">{{ tab.year }}</span>
+          {% else %}
+            <a class="govuk-link govuk-!-margin-right-3" href="{{ tab.href }}">{{ tab.year }}</a>
+          {% endif %}
+        {% endfor %}
+      </nav>
+      {% if not hasAnyData %}
+        <p class="govuk-body">{{ noData | replace('{year}', year) }}</p>
+      {% endif %}
+      {% if releasesToAir.length %}
+        <h3 class="govuk-heading-m">{{ sections.air | replace('{year}', year) }}</h3>
+        {{ pollutantTable(releasesToAir, table, table.totalReleased) }}
+      {% endif %}
+      {% if releasesToWater.length %}
+        <h3 class="govuk-heading-m">{{ sections.water | replace('{year}', year) }}</h3>
+        {{ pollutantTable(releasesToWater, table, table.totalReleased) }}
+      {% endif %}
+      {% if releasesToSoil.length %}
+        <h3 class="govuk-heading-m">{{ sections.soil | replace('{year}', year) }}</h3>
+        {{ pollutantTable(releasesToSoil, table, table.totalReleased) }}
+      {% endif %}
+      {% if transfersToWasteWater.length %}
+        <h3 class="govuk-heading-m">{{ sections.wasteWater | replace('{year}', year) }}</h3>
+        {{ pollutantTable(transfersToWasteWater, table, table.totalTransferred) }}
+      {% endif %}
+      {% if wasteTransfers.length %}
+        <h3 class="govuk-heading-m">{{ sections.waste | replace('{year}', year) }}</h3>
+        <table class="govuk-table" data-testid="waste-table">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th scope="col" class="govuk-table__header">{{ table.quantity }}</th>
+              <th scope="col" class="govuk-table__header">{{ table.wasteType }}</th>
+              <th scope="col" class="govuk-table__header">{{ table.treatment }}</th>
+              <th scope="col" class="govuk-table__header">{{ table.additionalDetail }}</th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            {% for waste in wasteTransfers %}
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">{{ waste.quantity }}</td>
+                <td class="govuk-table__cell">{{ waste.wasteType }}</td>
+                <td class="govuk-table__cell">{{ waste.treatment }}</td>
+                <td class="govuk-table__cell">
+                  <a class="govuk-link" href="{{ waste.detailHref }}">{{ table.viewDetails }}</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% endif %}
+      <h2 class="govuk-heading-m govuk-!-margin-top-8">{{ download.heading | replace('{year}', year) }}</h2>
+      <p class="govuk-body">{{ download.intro }}</p>
+      <p class="govuk-body">
+        <a class="govuk-link" href="{{ downloadHref }}">{{ download.button | replace('{year}', year) }}</a>
+      </p>
+    </div>
+  </div>
+{% endblock %}
