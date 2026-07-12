@@ -30,7 +30,7 @@ export function buildUrl(path) {
 /**
  * GET JSON from the backend with retry, timeout, and logging.
  *
- * @param {string} path - Backend path (e.g. '/years')
+ * @param {string} path - Backend path (e.g. '/reports')
  * @param {string} operationName - Label for logging/retry diagnostics
  * @returns {Promise<any>}
  */

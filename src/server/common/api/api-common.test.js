@@ -57,17 +57,17 @@ describe('api-common', () => {
 
   describe('fetchJson', () => {
     it('calls fetchWithRetry and returns parsed JSON on success', async () => {
-      const payload = { years: [2024, 2025] }
+      const payload = { results: [2024, 2025] }
       fetchWithRetry.mockResolvedValue({
         ok: true,
         status: 200,
         json: () => Promise.resolve(payload)
       })
 
-      const result = await fetchJson('/years', 'getYears')
+      const result = await fetchJson('/reports', 'getReports')
 
       expect(fetchWithRetry).toHaveBeenCalledWith(expect.any(Function), {
-        operationName: 'getYears'
+        operationName: 'getReports'
       })
       expect(result).toEqual(payload)
     })

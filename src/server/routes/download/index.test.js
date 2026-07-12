@@ -2,11 +2,11 @@ import { createServer } from '../../server.js'
 import { statusCodes } from '../../common/constants/status-codes.js'
 import { vi } from 'vitest'
 
-vi.mock('#src/server/common/api/year-downloads.js', () => ({
-  getYears: vi.fn().mockResolvedValue({
+vi.mock('#src/server/common/api/reports.js', () => ({
+  getReports: vi.fn().mockResolvedValue({
     success: true,
     count: 0,
-    years: []
+    results: []
   }),
   getDownloadLink: vi.fn()
 }))

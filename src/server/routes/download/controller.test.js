@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 
-vi.mock('#src/server/common/api/year-downloads.js', () => ({
-  getYears: vi.fn(),
+vi.mock('#src/server/common/api/reports.js', () => ({
+  getReports: vi.fn(),
   getDownloadLink: vi.fn()
 }))
 
@@ -10,14 +10,12 @@ vi.mock('#src/server/routes/download/download-proxy.js', () => ({
 }))
 
 import { downloadController } from '#src/server/routes/download/controller.js'
-import {
-  getYears,
-  getDownloadLink
-} from '#src/server/common/api/year-downloads.js'
+import { getReports, getDownloadLink } from '#src/server/common/api/reports.js'
 
 function buildResponseToolkit() {
   return {
-    view: vi.fn().mockReturnValue({})
+    view: vi.fn().mockReturnValue({}),
+    redirect: vi.fn().mockReturnValue({})
   }
 }
 
@@ -32,33 +30,27 @@ describe('downloadController', () => {
     vi.clearAllMocks()
   })
 
-  it('renders the download page with years data from the API', async () => {
+  it('renders the download page with reports data from the API', async () => {
     const h = buildResponseToolkit()
     const request = buildRequest()
 
-    vi.mocked(getYears).mockResolvedValueOnce({
+    vi.mocked(getReports).mockResolvedValueOnce({
       success: true,
       count: 2,
-      years: [
+      results: [
         {
-          id: 'year1',
+          id: 'report1',
           year: 2023,
-          yearIsLive: true,
+          reportIsLive: true,
           downloadLink: 'https://example.com/data/2023.xml'
         },
         {
-          id: 'year2',
+          id: 'report2',
           year: 2022,
-          yearIsLive: true,
+          reportIsLive: true,
           downloadLink: 'https://example.com/data/2022.xml'
         }
       ]
-    })
-    vi.mocked(getDownloadLink).mockResolvedValueOnce({
-      downloadLink: 'https://example.com/data/2023.xml'
-    })
-    vi.mocked(getDownloadLink).mockResolvedValueOnce({
-      downloadLink: 'https://example.com/data/2022.xml'
     })
 
     await downloadController.handler(request, h)
@@ -71,32 +63,31 @@ describe('downloadController', () => {
         hrefq: '/uk-pollutant-release-and-transfer-register',
         downloadLinks: expect.arrayContaining([
           expect.objectContaining({
-            text: expect.stringContaining('2023'),
-            href: 'https://example.com/data/2023.xml'
+            text: 'Download 2023 data',
+            href: '/download-all-data-for-a-year/file/2023'
           }),
           expect.objectContaining({
-            text: expect.stringContaining('2022'),
-            href: 'https://example.com/data/2022.xml'
+            text: 'Download 2022 data',
+            href: '/download-all-data-for-a-year/file/2022'
           })
         ])
       })
     )
+
+    // getDownloadLink should NOT be called on page load
+    expect(getDownloadLink).not.toHaveBeenCalled()
   })
 
-  it('handles API errors gracefully and renders with empty download links', async () => {
+  it('handles API errors gracefully and redirects to error page', async () => {
     const h = buildResponseToolkit()
     const request = buildRequest()
 
-    vi.mocked(getYears).mockRejectedValueOnce(new Error('API Error'))
+    vi.mocked(getReports).mockRejectedValueOnce(new Error('API Error'))
 
     await downloadController.handler(request, h)
 
-    expect(h.view).toHaveBeenCalledWith(
-      'download/index',
-      expect.objectContaining({
-        pageTitle: 'Download all data for a year',
-        downloadLinks: []
-      })
+    expect(h.redirect).toHaveBeenCalledWith(
+      '/problem-with-service?statusCode=500'
     )
   })
 
@@ -104,20 +95,17 @@ describe('downloadController', () => {
     const h = buildResponseToolkit()
     const request = buildRequest('cy')
 
-    vi.mocked(getYears).mockResolvedValueOnce({
+    vi.mocked(getReports).mockResolvedValueOnce({
       success: true,
       count: 1,
-      years: [
+      results: [
         {
-          id: 'year1',
+          id: 'report1',
           year: 2023,
-          yearIsLive: true,
+          reportIsLive: true,
           downloadLink: 'https://example.com/data/2023.xml'
         }
       ]
-    })
-    vi.mocked(getDownloadLink).mockResolvedValueOnce({
-      downloadLink: 'https://example.com/data/2023.xml'
     })
 
     await downloadController.handler(request, h)
@@ -127,36 +115,42 @@ describe('downloadController', () => {
       expect.objectContaining({
         pageTitle: 'Download all data for a year --CY',
         displayBackLink: true,
-        hrefq: '/uk-pollutant-release-and-transfer-register/cy'
+        hrefq: '/uk-pollutant-release-and-transfer-register/cy',
+        downloadLinks: expect.arrayContaining([
+          expect.objectContaining({
+            text: 'Download --CY 2023 data --CY',
+            href: '/download-all-data-for-a-year/file/2023'
+          })
+        ])
       })
     )
   })
 
-  it('reverses years order (newest first)', async () => {
+  it('reverses reports order (newest first)', async () => {
     const h = buildResponseToolkit()
     const request = buildRequest()
 
-    vi.mocked(getYears).mockResolvedValueOnce({
+    vi.mocked(getReports).mockResolvedValueOnce({
       success: true,
       count: 3,
-      years: [
+      results: [
         {
-          id: 'year3',
-          year: 2023,
-          yearIsLive: true,
-          downloadLink: 'https://example.com/data/2023.xml'
+          id: 'report1',
+          year: 2021,
+          reportIsLive: true,
+          downloadLink: 'https://example.com/data/2021.xml'
         },
         {
-          id: 'year2',
+          id: 'report2',
           year: 2022,
-          yearIsLive: true,
+          reportIsLive: true,
           downloadLink: 'https://example.com/data/2022.xml'
         },
         {
-          id: 'year1',
-          year: 2021,
-          yearIsLive: true,
-          downloadLink: 'https://example.com/data/2021.xml'
+          id: 'report3',
+          year: 2023,
+          reportIsLive: true,
+          downloadLink: 'https://example.com/data/2023.xml'
         }
       ]
     })
@@ -169,14 +163,14 @@ describe('downloadController', () => {
     expect(callArgs.downloadLinks[2].text).toContain('2021')
   })
 
-  it('handles API response with empty years array', async () => {
+  it('handles API response with empty reports array', async () => {
     const h = buildResponseToolkit()
     const request = buildRequest()
 
-    vi.mocked(getYears).mockResolvedValueOnce({
+    vi.mocked(getReports).mockResolvedValueOnce({
       success: true,
       count: 0,
-      years: []
+      results: []
     })
 
     await downloadController.handler(request, h)
@@ -189,11 +183,11 @@ describe('downloadController', () => {
     )
   })
 
-  it('handles API response with missing years property', async () => {
+  it('handles API response with missing results property', async () => {
     const h = buildResponseToolkit()
     const request = buildRequest()
 
-    vi.mocked(getYears).mockResolvedValueOnce({
+    vi.mocked(getReports).mockResolvedValueOnce({
       success: true,
       count: 0
     })

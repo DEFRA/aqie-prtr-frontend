@@ -1,32 +1,18 @@
 /**
- * Temporary frontend download proxy.
+ * Temporary frontend download handler.
  *
  * Fetches S3 presigned URLs server-side and streams them back with
  * Content-Disposition: attachment so the browser saves the file rather
  * than rendering it inline.
  *
- * Remove this file (and the two references in index.js / controller.js)
- * once the backend sends the correct Content-Disposition header itself.
+ * Once the backend sends the correct Content-Disposition header itself,
+ * the links can point directly to the backend URL.
  */
 import { Readable } from 'node:stream'
 import { createLogger } from '#src/server/common/helpers/logging/logger.js'
-import { statusCodes } from '#src/server/common/constants/status-codes.js'
+import { getDownloadLink } from '#src/server/common/api/reports.js'
 
 const logger = createLogger()
-
-const PROXY_PATH = '/download-all-data-for-a-year/file'
-
-/**
- * Rewrites a direct presigned URL to go through the same-origin proxy route.
- * Swap this back to `directUrl` when removing the proxy.
- *
- * @param {string} directUrl
- * @param {number|string} year
- * @returns {string}
- */
-export function toProxyHref(directUrl, year) {
-  return `${PROXY_PATH}?url=${encodeURIComponent(directUrl)}&year=${year}`
-}
 
 function buildDownloadFilename(year, sourceUrl) {
   if (year) {
@@ -46,34 +32,62 @@ function buildDownloadFilename(year, sourceUrl) {
   return 'uk_prtr_dataset.xml'
 }
 
-export async function handleDownloadFile(request, h) {
-  const { url, year } = request.query
+/**
+ * Handles download requests by fetching the presigned URL from the backend
+ * and streaming it back with proper Content-Disposition headers.
+ * Triggered when a user clicks a download link.
+ *
+ * TEMPORARY: This handler exists because the backend presigned URLs don't include
+ * Content-Disposition: attachment headers. Without these headers, S3 renders XML
+ * in the browser instead of prompting a download.
+ *
+ * TODO: Once the backend is updated to serve correct Content-Disposition headers,
+ * the links can point directly to the presigned URL and this handler can be removed.
+ *
+ * @param {Object} request - Hapi request object
+ * @param {Object} h - Hapi response toolkit
+ * @returns {Object} Stream response or error redirect
+ */
+export async function handleDownload(request, h) {
+  const { year } = request.params
 
-  let parsedUrl
   try {
-    parsedUrl = new URL(url)
-  } catch {
-    return h.response('Invalid download URL').code(statusCodes.badRequest)
-  }
+    // Fetch presigned URL from backend
+    const response = await getDownloadLink(year)
+    const presignedUrl = response.downloadLink
 
-  if (parsedUrl.protocol !== 'https:') {
-    return h
-      .response('Download URL must use https')
-      .code(statusCodes.badRequest)
-  }
+    if (!presignedUrl) {
+      logger.error(`[download] no download link returned for year ${year}`)
+      return h.redirect('/problem-with-service?statusCode=502')
+    }
 
-  try {
-    const upstream = await fetch(parsedUrl.toString())
+    // Validate presigned URL
+    let parsedUrl
+    try {
+      parsedUrl = new URL(presignedUrl)
+    } catch {
+      logger.error(`[download] invalid presigned URL for year ${year}`)
+      return h.redirect('/problem-with-service?statusCode=502')
+    }
+
+    if (parsedUrl.protocol !== 'https:') {
+      logger.error(`[download] presigned URL is not https for year ${year}`)
+      return h.redirect('/problem-with-service?statusCode=502')
+    }
+
+    // Fetch file from presigned URL
+    const upstream = await fetch(presignedUrl)
 
     if (!upstream.ok || !upstream.body) {
       logger.error(
-        `[download] upstream download failed: ${upstream.status} ${parsedUrl.toString()}`
+        `[download] failed to fetch file for year ${year}: ${upstream.status}`
       )
-      return h.response('Unable to download file').code(statusCodes.badGateway)
+      return h.redirect('/problem-with-service?statusCode=502')
     }
 
+    // Stream file back with proper headers
     const stream = Readable.fromWeb(upstream.body)
-    const filename = buildDownloadFilename(year, parsedUrl.toString())
+    const filename = buildDownloadFilename(year, presignedUrl)
     const contentType =
       upstream.headers.get('content-type') || 'application/octet-stream'
 
@@ -83,9 +97,11 @@ export async function handleDownloadFile(request, h) {
       .header('Content-Disposition', `attachment; filename="${filename}"`)
       .header('Cache-Control', 'no-store')
   } catch (error) {
-    logger.error(`[download] proxy failed: ${error.message}`)
-    return h.response('Unable to download file').code(statusCodes.badGateway)
+    logger.error(
+      `[download] failed to handle download for year ${year}: ${error.message}`
+    )
+    return h.redirect('/problem-with-service?statusCode=502')
   }
 }
 
-export const downloadFileController = { handler: handleDownloadFile }
+export const downloadController = { handler: handleDownload }

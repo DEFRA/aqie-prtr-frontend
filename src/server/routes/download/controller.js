@@ -1,9 +1,5 @@
-import {
-  getYears,
-  getDownloadLink
-} from '#src/server/common/api/year-downloads.js'
+import { getReports } from '#src/server/common/api/reports.js'
 import { createLogger } from '#src/server/common/helpers/logging/logger.js'
-import { toProxyHref } from './download-proxy.js' // Temporary proxy helper until backend serves attachment headers
 import { downloadContent } from './content.js'
 
 const logger = createLogger()
@@ -13,35 +9,24 @@ async function handleDownloads(request, h) {
   const { language = 'en' } = request.params // optional language parameter
   const content = downloadContent[language]
 
-  let yearsData = []
+  let reportsData = []
   try {
-    const response = await getYears()
-    yearsData = response.years || []
+    const response = await getReports()
+    reportsData = response.results || []
   } catch (error) {
-    logger.error(`[download] failed to fetch years: ${error.message}`)
-    yearsData = []
+    logger.error(`[download] failed to fetch reports: ${error.message}`)
+    return h.redirect('/problem-with-service?statusCode=500')
   }
 
-  const downloadLinks = await Promise.all(
-    yearsData.map(async (item) => {
-      try {
-        const response = await getDownloadLink(item.year)
-        const link = response.downloadLink
-        return {
-          text: `${content.downloadPrefix} ${item.year} ${content.dataSuffix}`,
-          href: toProxyHref(link, item.year)
-        }
-      } catch (error) {
-        logger.error(
-          `[download] failed to fetch download link for year ${item.year}: ${error.message}`
-        )
-        return {
-          text: `${content.downloadPrefix} ${item.year} ${content.dataSuffix}`,
-          href: null //need to handle this
-        }
+  const downloadLinks = reportsData
+    .filter((item) => item.reportIsLive === true)
+    .map((item) => {
+      return {
+        text: `${content.downloadPrefix} ${item.year} ${content.dataSuffix}`,
+        href: `/download-all-data-for-a-year/file/${item.year}`
       }
     })
-  )
+    .reverse()
 
   const hrefq = request.params.language ? `${HOME_PATH}/${language}` : HOME_PATH
 
