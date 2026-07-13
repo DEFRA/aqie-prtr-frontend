@@ -12,6 +12,7 @@ import { noLocationFound } from '../routes/no-location-found/index.js'
 import { facilities } from '../routes/facilities/index.js'
 import { facilityRecord } from '../routes/facility-record/index.js'
 import { facilityDetails } from '../routes/facility-details/index.js'
+import { competentAuthority } from '../routes/competent-authority/index.js'
 import { problemWithService } from '../routes/problem-with-service/index.js'
 
 export const router = {
@@ -34,6 +35,7 @@ export const router = {
         facilities,
         facilityRecord,
         facilityDetails,
+        competentAuthority,
         problemWithService
       ])
 
