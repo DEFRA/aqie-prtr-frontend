@@ -1,0 +1,41 @@
+{% extends 'layouts/page.njk' %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% block content %}
+  {{ appHeading({
+    text: heading
+  }) }}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% set addressHtml %}{% for line in view.addressLines %}{{ line }}{% if not loop.last %}<br>{% endif %}{% endfor %}{% endset %}
+
+      {{ govukSummaryList({
+        rows: [
+          { key: { text: fields.name },        value: { text: view.name } },
+          { key: { text: fields.activity },    value: { text: view.activity } },
+          { key: { text: fields.ippcCode },    value: { text: view.ippcCode } },
+          { key: { text: fields.address },     value: { html: addressHtml if view.addressLines.length else notAvailable } },
+          { key: { text: fields.coordinates }, value: { text: view.coordinates } },
+          { key: { text: fields.nutsRegion },  value: { text: view.nutsRegion } },
+          { key: { text: fields.naceCode },    value: { text: view.nace } },
+          { key: { text: fields.riverBasin },  value: { text: view.riverBasin } },
+          { key: { text: fields.nationalId },  value: { text: view.nationalId } }
+        ]
+      }) }}
+
+      {% for item in explainers %}
+        <h2 class="govuk-heading-m">{{ item.heading }}</h2>
+        <p class="govuk-body">
+          {% if item.link %}
+            {{ item.bodyStart }}<a class="govuk-link" href="{{ item.link.href }}" target="_blank" rel="noreferrer noopener">{{ item.link.text }}</a>{{ item.bodyEnd }}
+          {% else %}
+            {{ item.body }}
+          {% endif %}
+        </p>
+      {% endfor %}
+
+    </div>
+  </div>
+{% endblock %}
