@@ -7,7 +7,10 @@ vi.mock('#src/server/common/api/facility-details.js', () => ({
 import { facilityDetailsController } from '#src/server/routes/facility-details/controller.js'
 import { getFacilityDetails } from '#src/server/common/api/facility-details.js'
 
-const toolkit = () => ({ view: vi.fn(() => 'view'), redirect: vi.fn(() => 'redirect') })
+const toolkit = () => ({
+  view: vi.fn(() => 'view'),
+  redirect: vi.fn(() => 'redirect')
+})
 
 const DTO = {
   id: 'f-1',
@@ -34,14 +37,21 @@ describe('facilityDetailsController', () => {
     vi.mocked(getFacilityDetails).mockResolvedValueOnce(DTO)
     const h = toolkit()
 
-    await facilityDetailsController.handler({ params: { id: 'f-1' }, query: {} }, h)
+    await facilityDetailsController.handler(
+      { params: { id: 'f-1' }, query: {} },
+      h
+    )
 
     expect(h.view.mock.calls[0][0]).toBe('facility-details/index')
     const model = h.view.mock.calls[0][1]
 
     expect(model.view.coordinates).toBe('55.046479, -1.643142')
-    expect(model.view.nutsRegion).toBe('Northumberland and Tyne and Wear (UKC2)')
-    expect(model.view.nace).toBe('38.21 - Treatment and disposal of non-hazardous waste')
+    expect(model.view.nutsRegion).toBe(
+      'Northumberland and Tyne and Wear (UKC2)'
+    )
+    expect(model.view.nace).toBe(
+      '38.21 - Treatment and disposal of non-hazardous waste'
+    )
     expect(model.view.addressLines).toEqual([
       'Brunswick Industrial Est',
       'Newcastle Upon Tyne',
@@ -54,7 +64,10 @@ describe('facilityDetailsController', () => {
     vi.mocked(getFacilityDetails).mockResolvedValueOnce(DTO)
     const h = toolkit()
 
-    await facilityDetailsController.handler({ params: { id: 'f-1' }, query: {} }, h)
+    await facilityDetailsController.handler(
+      { params: { id: 'f-1' }, query: {} },
+      h
+    )
 
     expect(h.view.mock.calls[0][1].view.ippcCode).toBe('—')
   })
@@ -67,7 +80,10 @@ describe('facilityDetailsController', () => {
     })
     const h = toolkit()
 
-    await facilityDetailsController.handler({ params: { id: 'f-2' }, query: {} }, h)
+    await facilityDetailsController.handler(
+      { params: { id: 'f-2' }, query: {} },
+      h
+    )
 
     const { view } = h.view.mock.calls[0][1]
     expect(view.coordinates).toBe('—')
@@ -79,8 +95,13 @@ describe('facilityDetailsController', () => {
     vi.mocked(getFacilityDetails).mockRejectedValueOnce(new Error('boom'))
     const h = toolkit()
 
-    await facilityDetailsController.handler({ params: { id: 'f-1' }, query: {} }, h)
+    await facilityDetailsController.handler(
+      { params: { id: 'f-1' }, query: {} },
+      h
+    )
 
-    expect(h.redirect).toHaveBeenCalledWith('/problem-with-service?statusCode=500')
+    expect(h.redirect).toHaveBeenCalledWith(
+      '/problem-with-service?statusCode=500'
+    )
   })
 })

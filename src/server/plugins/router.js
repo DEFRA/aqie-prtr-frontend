@@ -13,6 +13,7 @@ import { facilities } from '../routes/facilities/index.js'
 import { facilityRecord } from '../routes/facility-record/index.js'
 import { facilityDetails } from '../routes/facility-details/index.js'
 import { competentAuthority } from '../routes/competent-authority/index.js'
+import { additionalDetail } from '../routes/additional-detail/index.js'
 import { problemWithService } from '../routes/problem-with-service/index.js'
 
 export const router = {
@@ -36,6 +37,7 @@ export const router = {
         facilityRecord,
         facilityDetails,
         competentAuthority,
+        additionalDetail,
         problemWithService
       ])
 

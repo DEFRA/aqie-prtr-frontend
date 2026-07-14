@@ -37,7 +37,10 @@ describe('competentAuthorityController', () => {
     vi.mocked(getCompetentAuthority).mockResolvedValueOnce(DTO)
     const h = toolkit()
 
-    await competentAuthorityController.handler({ params: { id: 'f-1' }, query: {} }, h)
+    await competentAuthorityController.handler(
+      { params: { id: 'f-1' }, query: {} },
+      h
+    )
 
     expect(h.view.mock.calls[0][0]).toBe('competent-authority/index')
     const model = h.view.mock.calls[0][1]
@@ -51,7 +54,9 @@ describe('competentAuthorityController', () => {
       'S9 4WF'
     ])
     expect(model.view.telephone).toBe('+44 03708506506')
-    expect(model.view.email).toBe('pollution.inventory@environment-agency.gov.uk')
+    expect(model.view.email).toBe(
+      'pollution.inventory@environment-agency.gov.uk'
+    )
     expect(model.hrefq).toBe('/facility/f-1')
   })
 
@@ -59,16 +64,25 @@ describe('competentAuthorityController', () => {
     vi.mocked(getCompetentAuthority).mockResolvedValueOnce(DTO)
     const h = toolkit()
 
-    await competentAuthorityController.handler({ params: { id: 'f-1' }, query: {} }, h)
+    await competentAuthorityController.handler(
+      { params: { id: 'f-1' }, query: {} },
+      h
+    )
 
     expect(h.view.mock.calls[0][1].view.fax).toBe('Not provided')
   })
 
   it('leaves email null when absent so the view renders "Not provided" instead of a mailto', async () => {
-    vi.mocked(getCompetentAuthority).mockResolvedValueOnce({ ...DTO, email: null })
+    vi.mocked(getCompetentAuthority).mockResolvedValueOnce({
+      ...DTO,
+      email: null
+    })
     const h = toolkit()
 
-    await competentAuthorityController.handler({ params: { id: 'f-1' }, query: {} }, h)
+    await competentAuthorityController.handler(
+      { params: { id: 'f-1' }, query: {} },
+      h
+    )
 
     expect(h.view.mock.calls[0][1].view.email).toBeNull()
   })
@@ -87,7 +101,10 @@ describe('competentAuthorityController', () => {
     })
     const h = toolkit()
 
-    await competentAuthorityController.handler({ params: { id: 'f-2' }, query: {} }, h)
+    await competentAuthorityController.handler(
+      { params: { id: 'f-2' }, query: {} },
+      h
+    )
 
     const { view } = h.view.mock.calls[0][1]
     expect(view.addressLines).toEqual([])
@@ -99,8 +116,13 @@ describe('competentAuthorityController', () => {
     vi.mocked(getCompetentAuthority).mockRejectedValueOnce(new Error('boom'))
     const h = toolkit()
 
-    await competentAuthorityController.handler({ params: { id: 'f-1' }, query: {} }, h)
+    await competentAuthorityController.handler(
+      { params: { id: 'f-1' }, query: {} },
+      h
+    )
 
-    expect(h.redirect).toHaveBeenCalledWith('/problem-with-service?statusCode=500')
+    expect(h.redirect).toHaveBeenCalledWith(
+      '/problem-with-service?statusCode=500'
+    )
   })
 })

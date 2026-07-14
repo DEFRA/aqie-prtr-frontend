@@ -10,7 +10,11 @@ export const facilityRecord = {
     register(server) {
       server.route([
         { method: 'GET', path: '/facility/{id}', ...facilityRecordController },
-        { method: 'GET', path: '/facility/{id}/{year}', ...facilityRecordController }
+        {
+          method: 'GET',
+          path: '/facility/{id}/{year}',
+          ...facilityRecordController
+        }
       ])
     }
   }

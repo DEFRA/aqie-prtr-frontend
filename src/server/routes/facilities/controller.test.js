@@ -29,7 +29,9 @@ describe('facilitiesController', () => {
 
     await facilitiesController.handler(buildRequest({}), h)
 
-    expect(h.redirect).toHaveBeenCalledWith('/find-industrial-sites-by-location')
+    expect(h.redirect).toHaveBeenCalledWith(
+      '/find-industrial-sites-by-location'
+    )
     expect(getFacilitiesNearby).not.toHaveBeenCalled()
   })
 
@@ -54,12 +56,21 @@ describe('facilitiesController', () => {
     const h = buildResponseToolkit()
 
     await facilitiesController.handler(
-      buildRequest({ lat: '55', lng: '-1.6', name: 'Newcastle upon Tyne', page: '1' }),
+      buildRequest({
+        lat: '55',
+        lng: '-1.6',
+        name: 'Newcastle upon Tyne',
+        page: '1'
+      }),
       h
     )
 
     expect(getFacilitiesNearby).toHaveBeenCalledWith({
-      lat: '55', lng: '-1.6', page: 1, perPage: 10, radius: 50
+      lat: '55',
+      lng: '-1.6',
+      page: 1,
+      perPage: 10,
+      radius: 50
     })
 
     const [view, model] = h.view.mock.calls[0]
@@ -77,8 +88,13 @@ describe('facilitiesController', () => {
     vi.mocked(getFacilitiesNearby).mockRejectedValueOnce(new Error('boom'))
     const h = buildResponseToolkit()
 
-    await facilitiesController.handler(buildRequest({ lat: '55', lng: '-1.6' }), h)
+    await facilitiesController.handler(
+      buildRequest({ lat: '55', lng: '-1.6' }),
+      h
+    )
 
-    expect(h.redirect).toHaveBeenCalledWith('/problem-with-service?statusCode=500')
+    expect(h.redirect).toHaveBeenCalledWith(
+      '/problem-with-service?statusCode=500'
+    )
   })
 })
