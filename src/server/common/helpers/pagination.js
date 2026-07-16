@@ -47,8 +47,11 @@ export function buildPagination({
   }
 
   const pagination = { items }
-  if (page > 1) pagination.previous = { href: hrefFor(baseQuery, page - 1) }
-  if (page < totalPages)
+  if (page > 1) {
+    pagination.previous = { href: hrefFor(baseQuery, page - 1) }
+  }
+  if (page < totalPages) {
     pagination.next = { href: hrefFor(baseQuery, page + 1) }
+  }
   return { pagination, summary }
 }
