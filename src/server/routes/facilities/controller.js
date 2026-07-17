@@ -16,7 +16,9 @@ function parsePage(value) {
 // Query string reused by every pagination link (everything except `page`).
 function baseQueryFor({ lat, lng, name, radius }) {
   const params = new URLSearchParams({ lng, lat, radius: String(radius) })
-  if (name) params.set('name', name)
+  if (name) {
+    params.set('name', name)
+  }
   return params.toString()
 }
 

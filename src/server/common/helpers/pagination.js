@@ -41,7 +41,7 @@ export function buildPagination({
   const items = []
   let prev = null
   for (const n of visiblePageNumbers(page, totalPages)) {
-    if (prev !== null && n - prev > 1) items.push(ELLIPSIS)
+    if (prev !== null && n - prev > 1) { items.push(ELLIPSIS) }
     items.push({ number: n, href: hrefFor(baseQuery, n), current: n === page })
     prev = n
   }
