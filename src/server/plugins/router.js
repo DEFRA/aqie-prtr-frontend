@@ -11,7 +11,7 @@ import { multiplelocations } from '../routes/multiplelocations/index.js'
 import { noLocationFound } from '../routes/no-location-found/index.js'
 import { facilities } from '../routes/facilities/index.js'
 import { facilityRecord } from '../routes/facility-record/index.js'
-import {problemWithService } from '../routes/problem-with-service/index.js'
+import { problemWithService } from '../routes/problem-with-service/index.js'
 
 export const router = {
   plugin: {

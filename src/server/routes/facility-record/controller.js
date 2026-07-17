@@ -37,7 +37,8 @@ async function handleFacilityRecord(request, h) {
     const selectedYear = data.year
     const base = `/facility/${id}/${selectedYear}`
 
-    const toRows = (rows) => rows.map((row) => toPollutantRow(row, content, base))
+    const toRows = (rows) =>
+      rows.map((row) => toPollutantRow(row, content, base))
     const releasesToAir = toRows(data.releasesToAir)
     const releasesToWater = toRows(data.releasesToWater)
     const releasesToSoil = toRows(data.releasesToSoil)
@@ -45,14 +46,20 @@ async function handleFacilityRecord(request, h) {
 
     const wasteTransfers = data.wasteTransfers.map((waste) => ({
       quantity: formatQty(waste.value, waste.unit, WASTE_UNIT, { space: true }),
-      wasteType: content.wasteTypes[waste.wasteTypeCode] ?? waste.wasteTypeCode ?? content.notAvailable,
+      wasteType:
+        content.wasteTypes[waste.wasteTypeCode] ??
+        waste.wasteTypeCode ??
+        content.notAvailable,
       treatment: waste.treatment ?? content.notAvailable,
       detailHref: `${base}/lines/${waste.lineId}`
     }))
 
     const hasAnyData = Boolean(
-      releasesToAir.length || releasesToWater.length || releasesToSoil.length ||
-      transfersToWasteWater.length || wasteTransfers.length
+      releasesToAir.length ||
+      releasesToWater.length ||
+      releasesToSoil.length ||
+      transfersToWasteWater.length ||
+      wasteTransfers.length
     )
 
     const yearTabs = data.facility.reportingYears.map((tabYear) => ({
