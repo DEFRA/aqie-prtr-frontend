@@ -88,7 +88,7 @@ async function handleFacilityRecord(request, h) {
       wasteTransfers,
       hasAnyData,
       detailsHref: `/facility/${id}/details`,
-      competentAuthorityHref: `/facility/${id}/${selectedYear}/competent-authority`,
+      competentAuthorityHref: `/facility/${id}/competent-authority`,
       downloadHref: `/facility/${id}/${selectedYear}/download`,
       displayBackLink: true,
       hrefq: '/facilities'
