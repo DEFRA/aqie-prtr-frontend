@@ -15,7 +15,13 @@ describe('getFacilitiesNearby', () => {
   it('calls fetchJson with the nearby path and operation name', async () => {
     fetchJson.mockResolvedValue({ results: [] })
 
-    await getFacilitiesNearby({ lat: 55, lng: -1.6, page: 2, perPage: 10, radius: 50 })
+    await getFacilitiesNearby({
+      lat: 55,
+      lng: -1.6,
+      page: 2,
+      perPage: 10,
+      radius: 50
+    })
 
     expect(fetchJson).toHaveBeenCalledWith(
       '/facilities/nearby?lat=55&lng=-1.6&page=2&perPage=10&radius=50',
@@ -35,7 +41,14 @@ describe('getFacilitiesNearby', () => {
   })
 
   it('returns the parsed JSON on success', async () => {
-    const payload = { count: 1, total: 657, page: 1, perPage: 10, totalPages: 66, results: [{ id: 'f-1' }] }
+    const payload = {
+      count: 1,
+      total: 657,
+      page: 1,
+      perPage: 10,
+      totalPages: 66,
+      results: [{ id: 'f-1' }]
+    }
     fetchJson.mockResolvedValue(payload)
 
     const result = await getFacilitiesNearby({ lat: 55, lng: -1.6 })
@@ -46,6 +59,8 @@ describe('getFacilitiesNearby', () => {
   it('propagates errors from fetchJson', async () => {
     fetchJson.mockRejectedValue(new Error('getFacilitiesNearby failed: 500'))
 
-    await expect(getFacilitiesNearby({ lat: 55, lng: -1.6 })).rejects.toThrow(/500/)
+    await expect(getFacilitiesNearby({ lat: 55, lng: -1.6 })).rejects.toThrow(
+      /500/
+    )
   })
 })
