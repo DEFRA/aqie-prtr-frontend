@@ -74,4 +74,69 @@ describe('facilityRecordController', () => {
       '/problem-with-service?statusCode=500'
     )
   })
+
+  it('renders the no-data state when every section is empty', async () => {
+    vi.mocked(getFacilityRecord).mockResolvedValueOnce({
+      facility: {
+        id: 'f-1',
+        name: 'X',
+        nationalId: 'Y',
+        reportingYears: [2024]
+      },
+      year: 2024,
+      releasesToAir: [],
+      releasesToWater: [],
+      releasesToSoil: [],
+      transfersToWasteWater: [],
+      wasteTransfers: []
+    })
+    const h = toolkit()
+    await facilityRecordController.handler(
+      { params: { id: 'f-1' }, query: {} },
+      h
+    )
+    expect(h.view.mock.calls[0][1].hasAnyData).toBe(false)
+  })
+
+  it('renders — for a null release value and falls back for unknown waste type', async () => {
+    vi.mocked(getFacilityRecord).mockResolvedValueOnce({
+      facility: {
+        id: 'f-1',
+        name: 'X',
+        nationalId: 'Y',
+        reportingYears: [2024]
+      },
+      year: 2024,
+      releasesToAir: [
+        {
+          lineId: 1,
+          pollutant: 'Pb',
+          value: null,
+          unit: 'KGM',
+          threshold: null
+        }
+      ],
+      releasesToWater: [],
+      releasesToSoil: [],
+      transfersToWasteWater: [],
+      wasteTransfers: [
+        {
+          lineId: 2,
+          value: 5,
+          unit: 'TNE',
+          wasteTypeCode: 'ZZZ',
+          treatment: null
+        }
+      ]
+    })
+    const h = toolkit()
+    await facilityRecordController.handler(
+      { params: { id: 'f-1' }, query: {} },
+      h
+    )
+    const m = h.view.mock.calls[0][1]
+    expect(m.releasesToAir[0].total).toBe('—')
+    expect(m.wasteTransfers[0].wasteType).toBe('ZZZ') // fell back to the raw code
+    expect(m.wasteTransfers[0].treatment).toBe(m.table ? '—' : '—')
+  })
 })
