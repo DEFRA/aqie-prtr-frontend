@@ -8,6 +8,10 @@ export const DEFAULT_MAX_RETRIES = 0
 export const DEFAULT_RETRY_DELAY_MS = 500
 export const DEFAULT_TIMEOUT_MS = 10_000
 
+//Retry backoff tuning
+export const DELAY_DOUBLING_FACTOR = 2 // delay doubles each attempt
+export const MAX_JITTER_MS = 100 // this is added so that noone retries in lockstep
+
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
@@ -21,8 +25,8 @@ function delay(ms) {
  * @returns {number}
  */
 function calculateRetryDelay(attemptNumber, baseDelayMs) {
-  const randomOffsetMs = randomInt(0, 100)
-  return baseDelayMs * 2 ** attemptNumber + randomOffsetMs
+  const randomOffsetMs = randomInt(0, MAX_JITTER_MS)
+  return baseDelayMs * DELAY_DOUBLING_FACTOR ** attemptNumber + randomOffsetMs
 }
 
 function createTimeoutController(timeoutMs) {
