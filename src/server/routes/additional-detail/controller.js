@@ -15,7 +15,7 @@ const MEDIUM_HEADING_KEY = {
 const DISPOSAL = 'Disposal'
 
 function formatQty(quantity, unitMap, { space = false } = {}) {
-  if (!quantity || quantity.value == null) {
+  if (quantity?.value == null) {
     return null
   }
   const amount = Number(quantity.value).toLocaleString('en-GB')

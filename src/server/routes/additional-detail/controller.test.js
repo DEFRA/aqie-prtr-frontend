@@ -238,4 +238,76 @@ describe('additionalDetailController', () => {
       '/problem-with-service?statusCode=500'
     )
   })
+
+  it('renders a release to water', async () => {
+    vi.mocked(getAdditionalDetail).mockResolvedValueOnce({
+      kind: 'release',
+      medium: 'WATER',
+      pollutant: 'NP/NPEs',
+      total: { value: 110, unit: 'KGM' },
+      threshold: null,
+      accidental: 0,
+      percentAccidental: 0,
+      methodBasis: 'Calculated',
+      methodDescription: 'Other calculation methodology.',
+      confidentiality: null
+    })
+    const h = toolkit()
+    await additionalDetailController.handler(
+      { params: { id: 'f-1', year: '2024', lineId: '3' }, query: {} },
+      h
+    )
+    const { view } = h.view.mock.calls[0][1]
+    expect(view.heading).toBe('Additional details of release to water')
+    expect(view.rows[0].key).toBe('Pollutant released to water')
+  })
+
+  it('renders a domestic hazardous (HWIC) waste with two explainers', async () => {
+    vi.mocked(getAdditionalDetail).mockResolvedValueOnce({
+      kind: 'waste',
+      wasteTypeCode: 'HWIC',
+      treatment: 'Recovery',
+      quantity: { value: 7026, unit: 'TNE' },
+      methodBasis: 'Measured',
+      methodDescription: 'Measurement by weighing.',
+      receiverCompany: null,
+      site: null,
+      confidentiality: null
+    })
+    const h = toolkit()
+    await additionalDetailController.handler(
+      { params: { id: 'f-1', year: '2024', lineId: '4' }, query: {} },
+      h
+    )
+    const { view } = h.view.mock.calls[0][1]
+    expect(view.heading).toBe(
+      'Additional detail of domestic hazardous waste transfer'
+    )
+    expect(view.explainers.map((e) => e.heading)).toEqual([
+      'What is a domestic hazardous waste transfer?',
+      'What is hazardous waste?',
+      'What does recovery mean?'
+    ])
+  })
+
+  it('formats a threshold when one is present', async () => {
+    vi.mocked(getAdditionalDetail).mockResolvedValueOnce({
+      kind: 'release',
+      medium: 'AIR',
+      pollutant: 'Lead',
+      total: { value: 612, unit: 'KGM' },
+      threshold: 200, // ← non-null exercises formatThreshold
+      accidental: 0,
+      percentAccidental: 0,
+      methodBasis: 'Measured',
+      methodDescription: 'x',
+      confidentiality: null
+    })
+    const h = toolkit()
+    await additionalDetailController.handler(
+      { params: { id: 'f-1', year: '2024', lineId: '1' }, query: {} },
+      h
+    )
+    expect(h.view.mock.calls[0][1].view.rows[2].text).toBe('200kg')
+  })
 })
