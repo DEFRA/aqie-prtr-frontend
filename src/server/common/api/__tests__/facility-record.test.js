@@ -60,9 +60,22 @@ describe('getFacilityRecord', () => {
 
   it('returns the parsed JSON on success', async () => {
     const payload = {
-      facility: { id: ID, name: 'Brunswick', nationalId: 'EW_EA-13989', reportingYears: [2024, 2023] },
+      facility: {
+        id: ID,
+        name: 'Brunswick',
+        nationalId: 'EW_EA-13989',
+        reportingYears: [2024, 2023]
+      },
       year: 2024,
-      releasesToAir: [{ lineId: 7, pollutant: 'Lead', value: 612, unit: 'KGM', threshold: null }],
+      releasesToAir: [
+        {
+          lineId: 7,
+          pollutant: 'Lead',
+          value: 612,
+          unit: 'KGM',
+          threshold: null
+        }
+      ],
       releasesToWater: [],
       releasesToSoil: [],
       transfersToWasteWater: [],

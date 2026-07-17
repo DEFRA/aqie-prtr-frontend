@@ -14,7 +14,10 @@ describe('problemWithServiceController', () => {
   it('renders the problem page and responds with the given status code', () => {
     const { h, view, code } = buildH()
 
-    problemWithServiceController.handler({ query: { statusCode: String(statusCodes.badGateway) } }, h)
+    problemWithServiceController.handler(
+      { query: { statusCode: String(statusCodes.badGateway) } },
+      h
+    )
 
     expect(view.mock.calls[0][0]).toBe('problem-with-service/index')
     expect(view.mock.calls[0][1]).toMatchObject({
@@ -31,7 +34,13 @@ describe('problemWithServiceController', () => {
     expect(code).toHaveBeenCalledWith(statusCodes.internalServerError)
   })
 
-  it.each([String(statusCodes.notFound), String(statusCodes.ok), 'abc', '<script>', '999'])(
+  it.each([
+    String(statusCodes.notFound),
+    String(statusCodes.ok),
+    'abc',
+    '<script>',
+    '999'
+  ])(
     'falls back to internal server error for a disallowed statusCode (%s)',
     (value) => {
       const { h, code } = buildH()

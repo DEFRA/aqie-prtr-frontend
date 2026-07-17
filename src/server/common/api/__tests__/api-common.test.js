@@ -3,7 +3,9 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 vi.mock('#src/config/config.js', () => ({
   config: {
     get: vi.fn((key) => {
-      if (key === 'backend.url') return 'http://localhost:3001/'
+      if (key === 'backend.url') {
+        return 'http://localhost:3001/'
+      }
       return undefined
     })
   }

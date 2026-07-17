@@ -40,13 +40,41 @@ export const facilityRecordContent = {
   },
   cy: {
     pageTitleSuffix: 'Releases and transfers --CY',
-    links: { facilityDetails: 'Facility details --CY', competentAuthority: 'Competent authority details --CY', startNewSearch: 'Start new search --CY' },
+    links: {
+      facilityDetails: 'Facility details --CY',
+      competentAuthority: 'Competent authority details --CY',
+      startNewSearch: 'Start new search --CY'
+    },
     releasesHeading: 'Releases and transfers --CY',
-    sections: { air: 'Pollutant releases to air in {year} --CY', water: 'Pollutant releases to water in {year} --CY', soil: 'Pollutant releases to soil in {year} --CY', wasteWater: 'Pollutant transfers to waste water in {year} --CY', waste: 'Waste transfers in {year} --CY' },
-    table: { pollutant: 'Pollutant --CY', totalReleased: 'Total released --CY', totalTransferred: 'Total transferred --CY', threshold: 'Threshold / Safe level --CY', additionalDetail: 'Additional detail --CY', viewDetails: 'View details --CY', quantity: 'Quantity --CY', wasteType: 'Waste type --CY', treatment: 'Treatment --CY' },
-    wasteTypes: { NONHW: 'Non hazardous waste --CY', HWIC: 'Domestic hazardous waste --CY', HWOC: 'Transboundary hazardous waste --CY' },
+    sections: {
+      air: 'Pollutant releases to air in {year} --CY',
+      water: 'Pollutant releases to water in {year} --CY',
+      soil: 'Pollutant releases to soil in {year} --CY',
+      wasteWater: 'Pollutant transfers to waste water in {year} --CY',
+      waste: 'Waste transfers in {year} --CY'
+    },
+    table: {
+      pollutant: 'Pollutant --CY',
+      totalReleased: 'Total released --CY',
+      totalTransferred: 'Total transferred --CY',
+      threshold: 'Threshold / Safe level --CY',
+      additionalDetail: 'Additional detail --CY',
+      viewDetails: 'View details --CY',
+      quantity: 'Quantity --CY',
+      wasteType: 'Waste type --CY',
+      treatment: 'Treatment --CY'
+    },
+    wasteTypes: {
+      NONHW: 'Non hazardous waste --CY',
+      HWIC: 'Domestic hazardous waste --CY',
+      HWOC: 'Transboundary hazardous waste --CY'
+    },
     noData: 'No releases or transfers were reported for {year}. --CY',
-    download: { heading: 'Download data for {year} --CY', intro: 'Some information on what the download will contain --CY', button: 'Download all {year} data for this facility --CY' },
+    download: {
+      heading: 'Download data for {year} --CY',
+      intro: 'Some information on what the download will contain --CY',
+      button: 'Download all {year} data for this facility --CY'
+    },
     notAvailable: '—'
   }
 }
