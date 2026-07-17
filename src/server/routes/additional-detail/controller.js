@@ -27,37 +27,57 @@ function addressLines(...parts) {
   return parts.filter(Boolean)
 }
 
+/** Display value, or the given fallback text when it's null/undefined. */
+const displayText = (value, fallback) => value ?? fallback
+
+function resolveHeading(detail, content) {
+  if (detail.kind === 'transfer') {
+    return content.headings.transfer
+  }
+  return content.headings[MEDIUM_HEADING_KEY[detail.medium]]
+}
+
+function resolvePollutantLabel(detail, content) {
+  if (detail.kind === 'transfer') {
+    return content.pollutantLabel.transfer
+  }
+  return content.pollutantLabel[detail.medium]
+}
+
+function formatThreshold(detail, content) {
+  if (detail.threshold == null) {
+    return content.notAvailable
+  }
+  return formatQty(
+    { value: detail.threshold, unit: detail.total?.unit },
+    RELEASE_UNIT
+  )
+}
+
+function confidentialityText(detail, content) {
+  return detail.confidentiality?.name ?? content.none
+}
+
 /** Release (air/water/soil) and transfer-to-waste-water share one field set. */
 function buildPollutantView(detail, content) {
-  const isTransfer = detail.kind === 'transfer'
-  const heading = isTransfer
-    ? content.headings.transfer
-    : content.headings[MEDIUM_HEADING_KEY[detail.medium]]
-  const pollutantLabel = isTransfer
-    ? content.pollutantLabel.transfer
-    : content.pollutantLabel[detail.medium]
+  const none = content.notAvailable
+  const totalKey =
+    detail.kind === 'transfer'
+      ? content.fields.totalTransferred
+      : content.fields.totalReleased
 
   return {
-    heading,
+    heading: resolveHeading(detail, content),
     rows: [
-      { key: pollutantLabel, text: detail.pollutant ?? content.notAvailable },
       {
-        key: isTransfer
-          ? content.fields.totalTransferred
-          : content.fields.totalReleased,
-        text: formatQty(detail.total, RELEASE_UNIT) ?? content.notAvailable
+        key: resolvePollutantLabel(detail, content),
+        text: displayText(detail.pollutant, none)
       },
       {
-        key: content.fields.threshold,
-        // Reporting thresholds are not in the Ricardo export yet.
-        text:
-          detail.threshold == null
-            ? content.notAvailable
-            : formatQty(
-                { value: detail.threshold, unit: detail.total?.unit },
-                RELEASE_UNIT
-              )
+        key: totalKey,
+        text: displayText(formatQty(detail.total, RELEASE_UNIT), none)
       },
+      { key: content.fields.threshold, text: formatThreshold(detail, content) },
       { key: content.fields.accidental, text: String(detail.accidental ?? 0) },
       {
         key: content.fields.percentAccidental,
@@ -65,15 +85,15 @@ function buildPollutantView(detail, content) {
       },
       {
         key: content.fields.method,
-        text: detail.methodBasis ?? content.notAvailable
+        text: displayText(detail.methodBasis, none)
       },
       {
         key: content.fields.methodDescription,
-        text: detail.methodDescription ?? content.notAvailable
+        text: displayText(detail.methodDescription, none)
       },
       {
         key: content.fields.confidentiality,
-        text: detail.confidentiality?.name ?? content.none
+        text: confidentialityText(detail, content)
       }
     ],
     explainers: []
@@ -103,31 +123,10 @@ function wasteExplainers(detail, content) {
   return byWasteType[detail.wasteTypeCode] ?? []
 }
 
-function buildWasteView(detail, content) {
-  const heading = content.headings[`waste${detail.wasteTypeCode}`]
+/** The receiver-company and site rows — only present on transboundary transfers. */
+function wasteHandlerRows(detail, content) {
+  const rows = []
 
-  const rows = [
-    {
-      key: content.fields.quantity,
-      text:
-        formatQty(detail.quantity, WASTE_UNIT, { space: true }) ??
-        content.notAvailable
-    },
-    {
-      key: content.fields.treatment,
-      text: detail.treatment ?? content.notAvailable
-    },
-    {
-      key: content.fields.method,
-      text: detail.methodBasis ?? content.notAvailable
-    },
-    {
-      key: content.fields.methodDescription,
-      text: detail.methodDescription ?? content.notAvailable
-    }
-  ]
-
-  // Only transboundary transfers normally carry a waste handler.
   if (detail.receiverCompany) {
     const { name, address } = detail.receiverCompany
     rows.push({
@@ -153,12 +152,41 @@ function buildWasteView(detail, content) {
     })
   }
 
-  rows.push({
-    key: content.fields.confidentiality,
-    text: detail.confidentiality?.name ?? content.none
-  })
+  return rows
+}
 
-  return { heading, rows, explainers: wasteExplainers(detail, content) }
+function buildWasteView(detail, content) {
+  const none = content.notAvailable
+
+  const rows = [
+    {
+      key: content.fields.quantity,
+      text: displayText(
+        formatQty(detail.quantity, WASTE_UNIT, { space: true }),
+        none
+      )
+    },
+    {
+      key: content.fields.treatment,
+      text: displayText(detail.treatment, none)
+    },
+    { key: content.fields.method, text: displayText(detail.methodBasis, none) },
+    {
+      key: content.fields.methodDescription,
+      text: displayText(detail.methodDescription, none)
+    },
+    ...wasteHandlerRows(detail, content),
+    {
+      key: content.fields.confidentiality,
+      text: confidentialityText(detail, content)
+    }
+  ]
+
+  return {
+    heading: content.headings[`waste${detail.wasteTypeCode}`],
+    rows,
+    explainers: wasteExplainers(detail, content)
+  }
 }
 
 async function handleAdditionalDetail(request, h) {
