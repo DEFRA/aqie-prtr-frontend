@@ -13,6 +13,7 @@ import { fetchJson } from './api-common.js'
  */
 const RECORDS_PER_PAGE = 10
 const DEFAULT_MILES = 50
+
 export function getFacilitiesNearby({
   lat,
   lng,

@@ -1,0 +1,33 @@
+{% extends 'layouts/page.njk' %}
+{% block content %}
+  {{ appHeading({
+    text: view.heading
+  }) }}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <dl class="govuk-summary-list" data-testid="detail-list">
+        {% for row in view.rows %}
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">{{ row.key }}</dt>
+            <dd class="govuk-summary-list__value">
+              {% if row.lines %}
+                {% for line in row.lines %}
+                  {{ line }}
+                  {% if not loop.last %}
+                    <br>
+                    {% endif %}
+                  {% endfor %}
+                {% else %}
+                  {{ row.text }}
+                {% endif %}
+              </dd>
+            </div>
+          {% endfor %}
+        </dl>
+        {% for item in view.explainers %}
+          <h2 class="govuk-heading-m">{{ item.heading }}</h2>
+          <p class="govuk-body">{{ item.body }}</p>
+        {% endfor %}
+      </div>
+    </div>
+  {% endblock %}
