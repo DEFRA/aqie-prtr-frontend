@@ -11,7 +11,13 @@ import { fetchJson } from './api-common.js'
  * @param {number} [params.radius=50]
  * @returns {Promise<{ count, total, page, perPage, totalPages, results: object[] }>}
  */
-export function getFacilitiesNearby({ lat, lng, page = 1, perPage = 10, radius = 50 }) {
+export function getFacilitiesNearby({
+  lat,
+  lng,
+  page = 1,
+  perPage = 10,
+  radius = 50
+}) {
   const params = new URLSearchParams({
     lat: String(lat),
     lng: String(lng),
@@ -19,5 +25,8 @@ export function getFacilitiesNearby({ lat, lng, page = 1, perPage = 10, radius =
     perPage: String(perPage),
     radius: String(radius)
   })
-  return fetchJson(`/facilities/nearby?${params.toString()}`, 'getFacilitiesNearby')
+  return fetchJson(
+    `/facilities/nearby?${params.toString()}`,
+    'getFacilitiesNearby'
+  )
 }
