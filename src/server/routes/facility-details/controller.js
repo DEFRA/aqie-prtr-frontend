@@ -5,30 +5,47 @@ import { facilityDetailsContent } from './content.js'
 
 const logger = createLogger()
 
+/** Fallback to the "not available" text when a value is empty. */
+const withFallback = (value, fallback) => value || fallback
+
+function formatCoordinates(coordinates, none) {
+  if (!coordinates) {
+    return none
+  }
+  return `${coordinates.lat}, ${coordinates.lng}`
+}
+
+function formatNutsRegion(nutsRegion, none) {
+  if (!nutsRegion) {
+    return none
+  }
+  return `${nutsRegion.name} (${nutsRegion.code})`
+}
+
+function formatNace(facility, none) {
+  if (facility.naceCode && facility.naceName) {
+    return `${facility.naceCode} - ${facility.naceName}`
+  }
+  return facility.naceCode || none
+}
+
 /** Turn the API DTO into ready-to-render display strings. */
 function buildViewModel(facility, content) {
   const none = content.notAvailable
   const address = facility.address ?? {}
 
   return {
-    name: facility.name || none,
-    activity: facility.activity || none,
-    ippcCode: facility.ippcCode || none,
+    name: withFallback(facility.name, none),
+    activity: withFallback(facility.activity, none),
+    ippcCode: withFallback(facility.ippcCode, none),
     addressLines: [address.street, address.city, address.postcode].filter(
       Boolean
     ),
-    coordinates: facility.coordinates
-      ? `${facility.coordinates.lat}, ${facility.coordinates.lng}`
-      : none,
-    nutsRegion: facility.nutsRegion
-      ? `${facility.nutsRegion.name} (${facility.nutsRegion.code})`
-      : none,
-    nace:
-      facility.naceCode && facility.naceName
-        ? `${facility.naceCode} - ${facility.naceName}`
-        : facility.naceCode || none,
-    riverBasin: facility.riverBasin || none,
-    nationalId: facility.nationalId || none
+    coordinates: formatCoordinates(facility.coordinates, none),
+    nutsRegion: formatNutsRegion(facility.nutsRegion, none),
+    nace: formatNace(facility, none),
+    riverBasin: withFallback(facility.riverBasin, none),
+    nationalId: withFallback(facility.nationalId, none)
   }
 }
 
