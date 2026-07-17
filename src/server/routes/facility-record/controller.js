@@ -9,7 +9,9 @@ const RELEASE_UNIT = { KGM: 'kg', TNE: 'tonne' }
 const WASTE_UNIT = { TNE: 'TONNE', KGM: 'kg' }
 
 function formatQty(value, unit, unitMap, { space = false } = {}) {
-  if (value == null) return '—'
+  if (value == null) {
+    return '—'
+  }
   const amount = Number(value).toLocaleString('en-GB')
   const label = unitMap[unit] ?? unit ?? ''
   return space ? `${amount} ${label}` : `${amount}${label}`
