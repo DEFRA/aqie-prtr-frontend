@@ -1,4 +1,5 @@
 import { getFacilitiesNearby } from '#src/server/common/api/facilities.js'
+import { searchFacilities } from '#src/server/common/api/facility-search.js'
 import { buildPagination } from '#src/server/common/helpers/pagination.js'
 import { createLogger } from '#src/server/common/helpers/logging/logger.js'
 import { resolveLang } from '#src/server/common/helpers/resolve-language.js'
@@ -33,29 +34,44 @@ function reportingLabels(facility, content) {
 async function handleFacilities(request, h) {
   const lang = resolveLang(request)
   const content = facilitiesContent[lang]
-  const { lat, lng, name } = request.query
+  const { lat, lng, name, searchType, q } = request.query
   const radius = DEFAULT_RADIUS_MILES
   const page = parsePage(request.query.page)
 
-  if (!lat || !lng) {
-    return h.redirect('/find-industrial-sites-by-location').takeover()
-  }
+  let data
+  let baseQuery
+  let heading
 
   try {
-    const data = await getFacilitiesNearby({
-      lat,
-      lng,
-      page,
-      perPage: DEFAULT_PER_PAGE,
-      radius
-    })
+    if (searchType && q) {
+      data = await searchFacilities({
+        searchType,
+        q,
+        page,
+        perPage: DEFAULT_PER_PAGE
+      })
+      baseQuery = new URLSearchParams({ searchType, q }).toString()
+      heading = content.searchHeadingTemplate.replace('{query}', q)
+    } else if (lat && lng) {
+      data = await getFacilitiesNearby({
+        lat,
+        lng,
+        page,
+        perPage: DEFAULT_PER_PAGE,
+        radius
+      })
+      baseQuery = baseQueryFor({ lat, lng, name, radius })
+      heading = content.headingTemplate.replace('{location}', name || '')
+    } else {
+      return h.redirect('/search-facility').takeover()
+    }
 
     const { pagination, summary } = buildPagination({
       page: data.page,
       perPage: data.perPage,
       total: data.total,
       totalPages: data.totalPages,
-      baseQuery: baseQueryFor({ lat, lng, name, radius })
+      baseQuery
     })
 
     const facilities = (data.results || []).map((facility) => ({
@@ -65,7 +81,7 @@ async function handleFacilities(request, h) {
 
     return h.view('facilities/index', {
       pageTitle: content.pageTitle,
-      heading: content.headingTemplate.replace('{location}', name || ''),
+      heading,
       summaryTemplate: content.summaryTemplate,
       table: content.table,
       summary,
@@ -75,7 +91,7 @@ async function handleFacilities(request, h) {
       hrefq: '/multiplelocations'
     })
   } catch (error) {
-    logger.error(`[facilities] failed lat=${lat} lng=${lng}: ${error.message}`)
+    logger.error(`[facilities] failed: ${error.message}`)
     return h.redirect('/problem-with-service?statusCode=500')
   }
 }

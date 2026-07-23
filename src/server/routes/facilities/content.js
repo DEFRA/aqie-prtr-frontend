@@ -2,6 +2,7 @@ export const facilitiesContent = {
   en: {
     pageTitle: 'Facilities near location',
     headingTemplate: 'Facilities near {location}',
+    searchHeadingTemplate: 'Facilities matching {query}',
     summaryTemplate: 'Showing {from} to {to} of {total} records',
     table: {
       facility: 'Facility',
@@ -20,6 +21,7 @@ export const facilitiesContent = {
   cy: {
     pageTitle: 'Facilities near location --CY',
     headingTemplate: 'Facilities near {location} --CY',
+    searchHeadingTemplate: 'Facilities matching {query} --CY',
     summaryTemplate: 'Showing {from} to {to} of {total} records --CY',
     table: {
       facility: 'Facility --CY',

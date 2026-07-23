@@ -1,0 +1,46 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% if params.errors.list %}
+  <div class="govuk-error-summary" data-module="govuk-error-summary">
+    <div role="alert">
+      <h2 class="govuk-error-summary__title">{{ params.errors.list.titleText }}</h2>
+      <div class="govuk-error-summary__body">
+        <ul class="govuk-list govuk-error-summary__list">
+          <li><a href="#search-input">{{ params.errorMessage.message.text }}</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+<form action="{{ params.action }}" method="post" novalidate>
+  <div class="govuk-form-group">
+    <h1 class="govuk-label-wrapper">
+      <label class="govuk-heading-l govuk-!-margin-bottom-4" for="search-input">{{ params.heading }}</label>
+    </h1>
+    {% if params.hint %}
+      <p id="search-input-hint" class="govuk-body govuk-hint">{{ params.hint }}</p>
+    {% endif %}
+  </div>
+
+  {% if params.errorMessage.message %}
+    <div class="govuk-form-group govuk-form-group--error">
+      <label class="govuk-label" for="search-input">{{ params.inputLabel }}</label>
+      <p id="search-input-error" class="govuk-error-message">
+        <span class="govuk-visually-hidden">Error:</span> {{ params.errorMessage.message.text }}
+      </p>
+      <input class="govuk-input govuk-input--error" id="search-input"
+             name="{{ params.name or 'fullSearchQuery' }}" type="text"
+             aria-describedby="search-input-hint search-input-error" value="{{ params.value }}">
+    </div>
+  {% else %}
+    <div class="govuk-form-group">
+      <label class="govuk-label govuk-!-font-weight-bold" for="search-input">{{ params.inputLabel }}</label>
+      <input class="govuk-input" id="search-input"
+             name="{{ params.name or 'fullSearchQuery' }}" type="text"
+             aria-describedby="search-input-hint" value="{{ params.value }}">
+    </div>
+  {% endif %}
+
+  {{ govukButton({ text: params.buttonText }) }}
+</form>
