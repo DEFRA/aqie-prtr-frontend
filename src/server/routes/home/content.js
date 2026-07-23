@@ -1,8 +1,8 @@
 export const homeContent = {
   en: {
     pageTitle: 'Search industrial pollutant emissions',
-    searchByLocation: 'Search by location',
-    searchByLocationDescription: 'Some descriptive information here?',
+    searchForFacility: 'Search for a facility',
+    searchForFacilityDescription: 'Some descriptive information here?',
     downloadData: 'You can',
     downloadDataLinkText:
       'download industrial emissions and waste transfer data.',
@@ -10,8 +10,8 @@ export const homeContent = {
   },
   cy: {
     pageTitle: 'Search industrial pollutant emissions --CY',
-    searchByLocation: 'Search by location --CY',
-    searchByLocationDescription: 'Some descriptive information here? --CY',
+    searchForFacility: 'Search for a facility --CY',
+    searchForFacilityDescription: 'Some descriptive information here? --CY',
     downloadData: 'You can --CY',
     downloadDataLinkText:
       'download industrial emissions and waste transfer data. --CY',

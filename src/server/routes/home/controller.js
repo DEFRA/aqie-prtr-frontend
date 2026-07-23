@@ -7,8 +7,8 @@ export const homeController = {
 
     return h.view('home/index', {
       pageTitle: content.pageTitle,
-      searchByLocation: content.searchByLocation,
-      searchByLocationDescription: content.searchByLocationDescription,
+      searchForFacility: content.searchForFacility,
+      searchForFacilityDescription: content.searchForFacilityDescription,
       downloadData: content.downloadData,
       downloadDataLinkText: content.downloadDataLinkText,
       downloadDataDescription: content.downloadDataDescription,
