@@ -3,9 +3,13 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 vi.mock('#src/server/common/api/facilities.js', () => ({
   getFacilitiesNearby: vi.fn()
 }))
+vi.mock('#src/server/common/api/facility-search.js', () => ({
+  searchFacilities: vi.fn()
+}))
 
 import { facilitiesController } from '#src/server/routes/facilities/controller.js'
 import { getFacilitiesNearby } from '#src/server/common/api/facilities.js'
+import { searchFacilities } from '#src/server/common/api/facility-search.js'
 
 function buildResponseToolkit() {
   const takeover = vi.fn().mockReturnValue('redirect')
@@ -24,18 +28,17 @@ describe('facilitiesController', () => {
     vi.clearAllMocks()
   })
 
-  it('redirects to the search page when lat/lng are missing', async () => {
+  it('redirects to the search chooser when there are no search params', async () => {
     const h = buildResponseToolkit()
 
     await facilitiesController.handler(buildRequest({}), h)
 
-    expect(h.redirect).toHaveBeenCalledWith(
-      '/find-industrial-sites-by-location'
-    )
+    expect(h.redirect).toHaveBeenCalledWith('/search-facility')
     expect(getFacilitiesNearby).not.toHaveBeenCalled()
+    expect(searchFacilities).not.toHaveBeenCalled()
   })
 
-  it('renders the facilities list with pagination and reporting labels', async () => {
+  it('renders the facilities list from a nearby (geo) search', async () => {
     vi.mocked(getFacilitiesNearby).mockResolvedValueOnce({
       count: 1,
       total: 657,
@@ -72,6 +75,7 @@ describe('facilitiesController', () => {
       perPage: 10,
       radius: 50
     })
+    expect(searchFacilities).not.toHaveBeenCalled()
 
     const [view, model] = h.view.mock.calls[0]
     expect(view).toBe('facilities/index')
@@ -82,6 +86,45 @@ describe('facilitiesController', () => {
       'Pollutant releases (2024)',
       'Waste transfers (2024)'
     ])
+  })
+
+  it('renders the facilities list from a field search (searchType + q)', async () => {
+    vi.mocked(searchFacilities).mockResolvedValueOnce({
+      count: 1,
+      total: 3,
+      page: 1,
+      perPage: 10,
+      totalPages: 1,
+      results: [
+        {
+          id: 'f-2',
+          name: 'Ampthill Metal Recycling',
+          activity: 'Disposal',
+          latestReportingYear: 2024,
+          latestReportingTypes: ['wasteTransfers']
+        }
+      ]
+    })
+    const h = buildResponseToolkit()
+
+    await facilitiesController.handler(
+      buildRequest({ searchType: 'name', q: 'Ampthill', page: '1' }),
+      h
+    )
+
+    expect(searchFacilities).toHaveBeenCalledWith({
+      searchType: 'name',
+      q: 'Ampthill',
+      page: 1,
+      perPage: 10
+    })
+    expect(getFacilitiesNearby).not.toHaveBeenCalled()
+
+    const [view, model] = h.view.mock.calls[0]
+    expect(view).toBe('facilities/index')
+    expect(model.heading).toBe('Facilities matching Ampthill')
+    expect(model.pagination).toBeNull() // single page
+    expect(model.facilities[0].reporting).toEqual(['Waste transfers (2024)'])
   })
 
   it('redirects to the problem page when the API fails', async () => {

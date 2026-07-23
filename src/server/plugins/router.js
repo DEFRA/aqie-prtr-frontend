@@ -15,6 +15,11 @@ import { facilityDetails } from '../routes/facility-details/index.js'
 import { competentAuthority } from '../routes/competent-authority/index.js'
 import { additionalDetail } from '../routes/additional-detail/index.js'
 import { problemWithService } from '../routes/problem-with-service/index.js'
+import { searchFacility } from '../routes/search-facility/index.js'
+import { searchByName } from '../routes/search-by-name/index.js'
+import { searchByRegion } from '../routes/search-by-region/index.js'
+import { searchByRiverBasin } from '../routes/search-by-river-basin/index.js'
+import { searchByYear } from '../routes/search-by-year/index.js'
 
 export const router = {
   plugin: {
@@ -38,7 +43,12 @@ export const router = {
         facilityDetails,
         competentAuthority,
         additionalDetail,
-        problemWithService
+        problemWithService,
+        searchFacility,
+        searchByName,
+        searchByRegion,
+        searchByRiverBasin,
+        searchByYear
       ])
 
       // Static assets
